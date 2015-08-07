@@ -1,4 +1,4 @@
-package com.sohu.live56.view.main.square.live;
+package com.sohu.live56.view.main;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
