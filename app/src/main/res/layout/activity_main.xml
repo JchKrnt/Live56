@@ -14,6 +14,8 @@
     <FrameLayout
         android:id="@+id/frag_content_fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@id/home_rg"
+        android:layout_alignParentTop="true"></FrameLayout>
 
 </RelativeLayout>
