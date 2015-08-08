@@ -5,17 +5,35 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/home_tab_live_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/homepage_bottom_live_normal" />
+
     <RadioGroup
         android:id="@+id/home_rg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"></RadioGroup>
+        style="@style/home_tab_radiogroup">
+
+        <RadioButton
+            style="@style/homepage_tab_btn"
+            android:checked="true"
+            android:drawableBottom="@drawable/homepage_bottom_square_btn" />
+
+        <RadioButton
+            style="@style/homepage_tab_btn"
+            android:drawableBottom="@drawable/homepage_bottom_mine_btn" />
+    </RadioGroup>
 
     <FrameLayout
         android:id="@+id/frag_content_fl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/home_rg"
-        android:layout_alignParentTop="true"></FrameLayout>
+        android:layout_alignParentTop="true"
+        android:background="@color/orange"></FrameLayout>
+
 
 </RelativeLayout>
