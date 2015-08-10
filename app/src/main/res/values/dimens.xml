@@ -1,7 +1,6 @@
 <resources>
 
     <!-- home -->
-    <dimen name="home_tab_drawable_pad">-10dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

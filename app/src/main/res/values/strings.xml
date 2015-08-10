@@ -8,4 +8,13 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <integer-array name="tab_ids">
+        <item>@android:id/tabcontent</item>
+        <item>@id/tab_bg_view_divid</item>
+        <item>@id/tab_bg_view</item>
+        <item>@id/tab_left_btn1</item>
+        <item>@id/tab_right_btn1</item>
+        <item>@id/tab_center_btn</item>
+    </integer-array>
 </resources>

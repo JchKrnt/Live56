@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- tab host ids -->
+    <item name="tab_center_btn" type="id" />
+    <item name="tab_left_btn1" type="id" />
+    <item name="tab_right_btn1" type="id" />
+    <item name="tab_bg_view" type="id" />
+    <item name="tab_bg_view_divid" type="id" />
+</resources>
