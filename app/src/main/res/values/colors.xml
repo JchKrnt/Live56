@@ -3,4 +3,5 @@
 
     <color name="orange">#EF5F3D</color>
     <color name="gray_bg">#eeeeee</color>
+    <color name="tab_gray_divide">#BEBEBE</color>
 </resources>
