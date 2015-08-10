@@ -1,40 +1,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/tests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-    <RadioGroup
-        android:id="@+id/home_rg"
-        style="@style/home_tab_radiogroup">
+    <com.sohu.live56.view.util.HomeTabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:tabIds="@array/tab_ids">
 
-        <RadioButton
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/orange"></FrameLayout>
+
+        <View
+            android:id="@id/tab_bg_view_divid"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/tab_gray_divide" />
+
+        <View
+            android:id="@id/tab_bg_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_bg" />
+
+        <CheckBox
+            android:id="@id/tab_left_btn1"
             style="@style/homepage_tab_btn"
             android:checked="true"
             android:drawableBottom="@drawable/homepage_bottom_square_btn" />
 
-        <RadioButton
+        <CheckBox
+            android:id="@id/tab_right_btn1"
             style="@style/homepage_tab_btn"
             android:drawableBottom="@drawable/homepage_bottom_mine_btn" />
-    </RadioGroup>
 
-    <FrameLayout
-        android:id="@+id/frag_content_fl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/home_rg"
-        android:layout_alignParentTop="true"
-        android:background="@color/orange"></FrameLayout>
-
-    <Button
-        android:id="@+id/home_tab_live_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@mipmap/homepage_bottom_live_normal" />
-
-
+        <ImageView
+            android:id="@id/tab_center_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@mipmap/homepage_bottom_live_normal" />
+    </com.sohu.live56.view.util.HomeTabHost>
 </RelativeLayout>
