@@ -34,7 +34,7 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
         }
     }
 
-    interface OnTabButonCheckedListener {
+    public interface OnTabButonCheckedListener {
 
         public void onLeftChecked(View view);
 
