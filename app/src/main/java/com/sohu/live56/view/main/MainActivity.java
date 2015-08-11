@@ -14,6 +14,9 @@ import com.sohu.live56.view.main.personal.PersonalFrag;
 import com.sohu.live56.view.main.square.SquareFrag;
 import com.sohu.live56.view.util.HomeTabHost;
 
+/**
+ * 主页。
+ */
 public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabButonCheckedListener {
 
     private HomeTabHost tabHost;
@@ -45,19 +48,32 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
 
         FragmentManager fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
-        squareFrag = SquareFrag.newInstance(null, null);
+        squareFrag = SquareFrag.newInstance();
         ft.add(android.R.id.tabcontent, squareFrag);
+        personalFrag = PersonalFrag.newInstance();
         ft.addToBackStack(null);
         ft.commit();
     }
 
     @Override
     public void onLeftChecked(View view) {
+        ft = getSupportFragmentManager().beginTransaction();
+        if (squareFrag == null)
+            squareFrag = SquareFrag.newInstance();
+        ft.replace(android.R.id.tabcontent, squareFrag);
+        ft.addToBackStack(null);
+        ft.commit();
 
     }
 
     @Override
     public void onRightChecked(View view) {
+        ft = getSupportFragmentManager().beginTransaction();
+        if (personalFrag == null)
+            personalFrag = PersonalFrag.newInstance();
+        ft.replace(android.R.id.tabcontent, personalFrag);
+        ft.addToBackStack(null);
+        ft.commit();
 
     }
 }

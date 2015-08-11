@@ -1,9 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
 
@@ -17,7 +16,7 @@
             android:id="@android:id/tabcontent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/orange"></FrameLayout>
+            android:background="@color/gray_bg"></FrameLayout>
 
         <View
             android:id="@id/tab_bg_view_divid"
@@ -29,7 +28,7 @@
             android:id="@id/tab_bg_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray_bg" />
+            android:background="@color/white" />
 
         <CheckBox
             android:id="@id/tab_left_btn1"
@@ -49,4 +48,4 @@
             android:padding="5dp"
             android:src="@mipmap/homepage_bottom_live_normal" />
     </com.sohu.live56.view.util.HomeTabHost>
-</RelativeLayout>
+</FrameLayout>

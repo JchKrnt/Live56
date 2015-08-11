@@ -21,12 +21,16 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
         if (isChecked) {
             if (buttonView.getId() == R.id.tab_right_btn1) {
                 leftBtn.setChecked(false);
+                leftBtn.setEnabled(true);
+                rightBtn.setEnabled(false);
                 if (onTabButonCheckedListener != null) {
                     onTabButonCheckedListener.onRightChecked(buttonView);
                 }
 
             } else if (buttonView.getId() == R.id.tab_left_btn1) {
                 rightBtn.setChecked(false);
+                rightBtn.setEnabled(true);
+                leftBtn.setEnabled(false);
                 if (onTabButonCheckedListener != null) {
                     onTabButonCheckedListener.onLeftChecked(buttonView);
                 }
@@ -106,11 +110,6 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
         int cCount = getChildCount();
         for (int i = 0; i < cCount; i++) {
             View cView = getChildAt(i);
@@ -131,6 +130,8 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
 
                 case R.id.tab_left_btn1: {
                     leftBtn = (CheckBox) cView;
+                    if (leftBtn.isChecked())
+                        leftBtn.setEnabled(false);
                     leftBtn.setOnCheckedChangeListener(this);
                     break;
                 }
@@ -142,11 +143,18 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
 
                 case R.id.tab_right_btn1: {
                     rightBtn = (CheckBox) cView;
+                    if (rightBtn.isChecked())
+                        rightBtn.setEnabled(false);
                     rightBtn.setOnCheckedChangeListener(this);
                     break;
                 }
             }
         }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+
 
         layoutTabBgView(tabBgView, leftBtn.getMeasuredHeight());
         layoutTabDividView(divideView);

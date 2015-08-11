@@ -1,13 +1,39 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_bg"
+    android:clickable="true"
+    android:orientation="vertical"
     tools:context="com.sohu.live56.view.main.square.SquareFrag">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout style="@style/style_title_bar">
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/style_title_font"
+            android:text="@string/find" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/square_lv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:divider="@null"
+        android:dividerHeight="10dp"></ListView>
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/square_nodate_fl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/square_nodate"
+            android:textColor="@color/gray_font"
+            android:textSize="12dp" />
+    </FrameLayout>
+
+</LinearLayout>
