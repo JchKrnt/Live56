@@ -104,6 +104,11 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
     }
 
     @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
         int cCount = getChildCount();
