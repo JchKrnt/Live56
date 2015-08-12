@@ -1,1 +1,1 @@
-include ':app', ':utillib'
+include ':app', ':utillib', ':android-gif-drawable'
