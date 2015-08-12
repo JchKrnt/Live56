@@ -34,7 +34,39 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerInParent">true</item>
         <item name="android:textColor">@color/black_font</item>
-        <item name="android:textSize">21sp</item>
+        <item name="android:textSize">@dimen/font_title_21</item>
+    </style>
+
+    <style name="style_13_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_font</item>
+        <item name="android:textSize">@dimen/font_item_13</item>
+    </style>
+
+    <style name="style_13_single_text" parent="style_13_text">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="font_15_white">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="font_15_w_text" parent="font_15_white">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="gray_bg_label" parent="font_15_white">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/gray_text_bg</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingLeft">7dp</item>
+        <item name="android:paddingRight">7dp</item>
+        <item name="android:paddingTop">3dp</item>
     </style>
 
 </resources>

@@ -46,7 +46,7 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
     }
 
 
-    class Position {
+    public static class Position {
         int left, top, right, bottom;
 
         public void setPosition(int left, int top, int right, int bottom) {

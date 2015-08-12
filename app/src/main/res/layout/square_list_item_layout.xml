@@ -1,8 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.sohu.live56.view.util.FindItemView
+        android:id="@+id/square_item_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/square_item_img">
+
+        <TextView
+            android:id="@id/square_item_view_title"
+            style="@style/gray_bg_label"
+            android:layout_margin="7dp"
+            android:text="正宗土耳其美食" />
+
+        <LinearLayout
+            android:id="@id/square_item_view_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:background="@drawable/gray_text_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/square_livelight" />
+
+            <TextView
+                android:id="@+id/square_item_view_state_tv"
+                style="@style/font_15_w_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="直播中" />
+        </LinearLayout>
+
+        <include
+            android:id="@id/square_item_view_btm"
+            layout="@layout/square_item_btm_layout" />
+
+        <com.jch.utillib.view.CircleImageView
+            android:id="@id/square_item_view_head"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="7dp"
+            android:src="@mipmap/login_account"
+            app:border_color="@color/white"
+            app:border_width="2dp" />
+
+    </com.sohu.live56.view.util.FindItemView>
 
 </LinearLayout>

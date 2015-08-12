@@ -7,4 +7,11 @@
     <item name="tab_right_btn1" type="id" />
     <item name="tab_bg_view" type="id" />
     <item name="tab_bg_view_divid" type="id" />
+
+    <!-- square item ids-->
+    <item name="square_item_view_img" type="id" />
+    <item name="square_item_view_title" type="id" />
+    <item name="square_item_view_state" type="id" />
+    <item name="square_item_view_head" type="id" />
+    <item name="square_item_view_btm" type="id" />
 </resources>
