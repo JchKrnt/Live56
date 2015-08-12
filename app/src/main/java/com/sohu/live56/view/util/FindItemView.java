@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ public class FindItemView extends ViewGroup {
     private LinearLayout stateLl;
     private Bitmap bgBitmap;
     private CircleImageView headImg;
-    private RelativeLayout btmRl;
+    private FrameLayout btmRl;
     private TextView nameTv;
     private TextView addrTv;
     private TextView numTv;
@@ -52,7 +53,7 @@ public class FindItemView extends ViewGroup {
         stateLl = (LinearLayout) findViewById(R.id.square_item_view_state);
         bgBitmap = ((BitmapDrawable) getBackground()).getBitmap();
         headImg = (CircleImageView) findViewById(R.id.square_item_view_head);
-        btmRl = (RelativeLayout) findViewById(R.id.square_item_view_btm);
+        btmRl = (FrameLayout) findViewById(R.id.square_item_view_btm);
         nameTv = (TextView) findViewById(R.id.square_item_name);
         addrTv = (TextView) findViewById(R.id.square_item_addr);
         numTv = (TextView) findViewById(R.id.square_item_num);
@@ -70,10 +71,7 @@ public class FindItemView extends ViewGroup {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         //获得此ViewGroup上级容器为其推荐的宽和高，及计算模式
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
 
         //计算所有childview的宽和高。
         measureChildren(widthMeasureSpec, heightMeasureSpec);
@@ -169,9 +167,36 @@ public class FindItemView extends ViewGroup {
 
         Bitmap tempBtm = Bitmap.createBitmap(bgBitmap, 0, bgBitmap.getHeight() - btmRl.getMeasuredHeight(), btmRl.getMeasuredWidth(), btmRl.getHeight());
 
-        Bitmap blureBmp = ImageUtil.fastblur(getContext(), tempBtm, 20);
+        Bitmap blureBmp = ImageUtil.fastblur(getContext(), tempBtm, 30);
 
         btmRl.setBackground(new BitmapDrawable(getResources(), blureBmp));
+    }
+
+    public void setHeadImg(Bitmap bitmap) {
+        headImg.setImageBitmap(bitmap);
+    }
+
+    public void setName(String name) {
+        nameTv.setText(name);
+    }
+
+    public void setAddr(String addr) {
+        addrTv.setText(addr);
+    }
+
+    public void setCustomerNum(String customerNum) {
+        numTv.setText(customerNum);
+    }
+
+    public void setTitle(String title) {
+        titleTv.setText(title);
+    }
+
+    public void setItemBgBmp(Bitmap bmp) {
+        if (bgBitmap != null && !bgBitmap.isRecycled())
+            bgBitmap.recycle();
+        bgBitmap = bmp;
+        invalidate();
     }
 
 }

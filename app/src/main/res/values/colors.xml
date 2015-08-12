@@ -7,7 +7,7 @@
     <color name="tab_gray_divide">#cccccc</color>
     <color name="black_font">#1f1f1f</color>
     <color name="gray_font">#9A9A9A</color>
-    <color name="alpha_gray">#55999999</color>
+    <color name="alpha_list_bg">#aaffffff</color>
     <color name="text_gray_bg">#2b2c19</color>
 
 </resources>

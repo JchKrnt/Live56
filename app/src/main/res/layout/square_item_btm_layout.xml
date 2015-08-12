@@ -1,65 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:background="@color/alpha_gray"
-    android:orientation="vertical">
-    it
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/square_item_center_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/alpha_list_bg"
+        android:orientation="vertical">
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/square_item_center_ll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/square_location" />
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/square_location" />
+
+            <TextView
+                android:id="@+id/square_item_addr"
+                style="@style/style_13_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:ellipsize="end"
+                android:maxEms="8"
+                android:singleLine="true"
+                android:text="北京.国贸" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/square_item_addr"
+            android:id="@+id/square_item_name"
             style="@style/style_13_text"
+            android:layout_alignLeft="@id/square_item_center_ll"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="57dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="王晓华" />
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="北京.国贸" />
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/square_item_center_ll"
+            android:gravity="right">
 
-    <TextView
-        android:id="@+id/square_item_name"
-        android:layout_toLeftOf="@id/square_item_center_ll"
-        style="@style/style_13_text"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="57dp"
-        android:text="王晓华" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/square_consumer" />
 
+            <TextView
+                android:id="@+id/square_item_num"
+                style="@style/style_13_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text="193" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/square_item_center_ll"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
-        android:gravity="right">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/square_consumer" />
-
-        <TextView
-            android:id="@+id/square_item_num"
-            style="@style/style_13_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="193" />
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+</FrameLayout>

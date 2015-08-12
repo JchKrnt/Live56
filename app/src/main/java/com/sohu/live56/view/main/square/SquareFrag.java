@@ -41,8 +41,6 @@ public class SquareFrag extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -73,5 +71,6 @@ public class SquareFrag extends Fragment {
         squarelv = (ListView) view.findViewById(R.id.square_lv);
         squarenodatefl = (FrameLayout) view.findViewById(R.id.square_nodate_fl);
     }
+
 
 }
