@@ -2,7 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowTitleStyle">@style/LiveWindowTitleStyle</item>
+    </style>
+
+
+    <style name="LiveWindowTitleStyle">
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="homepage_tab_btn">

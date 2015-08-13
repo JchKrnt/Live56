@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
 
@@ -12,16 +14,10 @@
         android:layout_height="match_parent"
         app:tabIds="@array/tab_ids">
 
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_bg"></FrameLayout>
-
         <View
             android:id="@id/tab_bg_view_divid"
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="1dp"
             android:background="@color/tab_gray_divide" />
 
         <View
@@ -36,10 +32,17 @@
             android:checked="true"
             android:drawableBottom="@drawable/homepage_bottom_square_btn" />
 
+
         <CheckBox
             android:id="@id/tab_right_btn1"
             style="@style/homepage_tab_btn"
             android:drawableBottom="@drawable/homepage_bottom_mine_btn" />
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_bg"></FrameLayout>
 
         <ImageView
             android:id="@id/tab_center_btn"

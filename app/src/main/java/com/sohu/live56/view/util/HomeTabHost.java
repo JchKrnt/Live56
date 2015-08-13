@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Space;
+import android.widget.TabHost;
 
 import com.sohu.live56.R;
 
@@ -91,24 +94,8 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
 
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        //获取此ViewGroup上级容器为其推荐的宽和高，以及计算模式。
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
-
-        //计算出所有childView的宽和高。
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
-
-
-        setMeasuredDimension(sizeWidth, sizeHeight);
-    }
-
-    @Override
     protected void onFinishInflate() {
+
         super.onFinishInflate();
         int cCount = getChildCount();
         for (int i = 0; i < cCount; i++) {
@@ -153,6 +140,34 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        //获取此ViewGroup上级容器为其推荐的宽和高，以及计算模式。
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
+        int totalUsedHeihgt = 0;
+        int totalUsedWidth = 0;
+        //计算childView的宽和高。
+        for (int i = 0; i < getChildCount(); i++) {
+
+            View childView = getChildAt(i);
+            if (childView.getId() == android.R.id.tabcontent) {     //i=4;最后计算tabcontent.
+
+                measureChildWithMargins(childView, widthMeasureSpec, 0, heightMeasureSpec, totalUsedHeihgt);
+            } else {        //计算出除tabcontent 外的childView的尺寸。
+                measureChild(childView, widthMeasureSpec, heightMeasureSpec);
+                if (childView.getId() == R.id.tab_bg_view_divid || childView.getId() == R.id.tab_left_btn1)
+                    totalUsedHeihgt += childView.getMeasuredHeight();           //tab用去的height。
+            }
+        }
+
+        setMeasuredDimension(sizeWidth, sizeHeight);
+    }
+
+    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
 
@@ -171,8 +186,8 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
 
         MarginLayoutParams mLayoutParams = (MarginLayoutParams) view.getLayoutParams();
         int left, top, right, bottom;
-
-        left = mLayoutParams.leftMargin;
+        left = mLayoutParams.leftMargin
+        ;
         top = getHeight() - height - mLayoutParams.bottomMargin;
         right = mLayoutParams.leftMargin + view.getMeasuredWidth();
         bottom = getHeight() - mLayoutParams.bottomMargin;
@@ -207,6 +222,8 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
         top = mLayoutParams.topMargin;
         right = getWidth() - mLayoutParams.rightMargin;
         bottom = divideViewPosition.top - mLayoutParams.bottomMargin;
+
+        int height = view.getMeasuredHeight();
 
         view.layout(left, top, right, bottom);
     }

@@ -199,4 +199,31 @@ public class FindItemView extends ViewGroup {
         invalidate();
     }
 
+    public TextView getTitleTv() {
+        return titleTv;
+    }
+
+    public TextView getStateTv() {
+        return stateTv;
+    }
+
+    public Bitmap getBgBitmap() {
+        return bgBitmap;
+    }
+
+    public CircleImageView getHeadImg() {
+        return headImg;
+    }
+
+    public TextView getNameTv() {
+        return nameTv;
+    }
+
+    public TextView getAddrTv() {
+        return addrTv;
+    }
+
+    public TextView getNumTv() {
+        return numTv;
+    }
 }

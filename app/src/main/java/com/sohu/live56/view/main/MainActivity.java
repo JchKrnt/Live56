@@ -1,6 +1,7 @@
 package com.sohu.live56.view.main;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -49,7 +50,7 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
         FragmentManager fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
         squareFrag = SquareFrag.newInstance();
-        ft.add(android.R.id.tabcontent, squareFrag);
+        ft.replace(android.R.id.tabcontent, squareFrag);
         personalFrag = PersonalFrag.newInstance();
         ft.addToBackStack(null);
         ft.commit();
