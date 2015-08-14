@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Live56.iml" filepath="$PROJECT_DIR$/Live56.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android-gif-drawable/android-gif-drawable.iml" filepath="$PROJECT_DIR$/android-gif-drawable/android-gif-drawable.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/utillib/utillib.iml" filepath="$PROJECT_DIR$/utillib/utillib.iml" />
     </modules>
