@@ -20,5 +20,6 @@
     
     <string name="find">发现</string>
     <string name="square_nodate">世界太安静，环没有数据</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>
 

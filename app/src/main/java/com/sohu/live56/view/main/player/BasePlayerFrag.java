@@ -11,13 +11,17 @@ import com.sohu.live56.view.BaseFragment;
 
 /**
  * Created by jingbiaowang on 2015/8/13.
- * <p>
- * the common controller for palyer .
+ * <p/>
+ * the common controller for palyer .Instance of stop , share.
  */
 public class BasePlayerFrag extends BaseFragment {
 
-    private View contentLayout;
+    private BasePlayEvent playEvent;
 
+    @Override
+    public void onSetEventListener(OnFragmentInteractionListener listener) {
+        playEvent = (BasePlayEvent) listener;
+    }
 
 }
 

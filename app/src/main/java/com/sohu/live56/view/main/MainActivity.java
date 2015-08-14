@@ -52,7 +52,6 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
         squareFrag = SquareFrag.newInstance();
         ft.replace(android.R.id.tabcontent, squareFrag);
         personalFrag = PersonalFrag.newInstance();
-        ft.addToBackStack(null);
         ft.commit();
     }
 
@@ -62,7 +61,6 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
         if (squareFrag == null)
             squareFrag = SquareFrag.newInstance();
         ft.replace(android.R.id.tabcontent, squareFrag);
-        ft.addToBackStack(null);
         ft.commit();
 
     }
@@ -73,8 +71,6 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
         if (personalFrag == null)
             personalFrag = PersonalFrag.newInstance();
         ft.replace(android.R.id.tabcontent, personalFrag);
-        ft.addToBackStack(null);
         ft.commit();
-
     }
 }

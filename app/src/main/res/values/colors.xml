@@ -8,6 +8,8 @@
     <color name="black_font">#1f1f1f</color>
     <color name="gray_font">#9A9A9A</color>
     <color name="alpha_list_bg">#aaffffff</color>
+    <color name="alaha_edit_bg">#aa020202</color>
     <color name="text_gray_bg">#2b2c19</color>
+    <color name="blue">#0000ff</color>
 
 </resources>

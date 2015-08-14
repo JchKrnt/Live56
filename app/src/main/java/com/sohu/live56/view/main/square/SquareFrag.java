@@ -1,6 +1,7 @@
 package com.sohu.live56.view.main.square;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -9,12 +10,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sohu.live56.R;
 import com.sohu.live56.bean.Room;
+import com.sohu.live56.view.main.player.ObserverActivity;
+import com.sohu.live56.view.main.player.ObserverFrag;
 
 import java.util.ArrayList;
 
@@ -27,7 +31,7 @@ import java.util.ArrayList;
  * Use the {@link SquareFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SquareFrag extends Fragment {
+public class SquareFrag extends Fragment implements AdapterView.OnItemClickListener {
     private TextView titletv;
     private ListView squarelv;
     private FrameLayout squarenodatefl;
@@ -78,6 +82,7 @@ public class SquareFrag extends Fragment {
         titletv = (TextView) view.findViewById(R.id.title_tv);
         squarelv = (ListView) view.findViewById(R.id.square_lv);
         squarelv.setSelector(new BitmapDrawable());
+        squarelv.setOnItemClickListener(this);
         squarenodatefl = (FrameLayout) view.findViewById(R.id.square_nodate_fl);
 
         squareAdapter = new SquareAdapter(getActivity().getApplicationContext());
@@ -107,4 +112,10 @@ public class SquareFrag extends Fragment {
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent = new Intent(getActivity(), ObserverActivity.class);
+        startActivity(intent);
+    }
 }

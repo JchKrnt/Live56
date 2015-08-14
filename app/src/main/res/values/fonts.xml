@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="font_title_21">21sp</dimen>
+    <dimen name="font_name_12">12sp</dimen>
     <dimen name="font_item_13">13sp</dimen>
+    <dimen name="font_career_8">8sp</dimen>
 </resources>
