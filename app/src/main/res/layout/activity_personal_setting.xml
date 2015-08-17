@@ -3,36 +3,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sohu.live56.view.login.PersonalSettingActivity">
 
+    <include layout="@layout/personal_head_img_layout" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/setting_top_img_bg"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <com.jch.utillib.view.CircleImageView
-            android:id="@+id/set_head_img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/weibo"
-            app:border_width="0dp" />
-
-        <TextView
-            android:id="@+id/set_modify_btn"
-            style="@style/font_13_w"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/set_modity_head_btn_bg"
-            android:padding="5dp"
-            android:text="@string/modity_head_img" />
+        style="@style/login_input_area"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
 
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/person_tel"
+                style="@style/personal_text_title"
+                android:text="@string/update_name" />
+
+            <TextView
+                android:id="@+id/person_tel_tv"
+                style="@style/style_personal_text_r"
+                android:layout_toRightOf="@id/person_tel" />
+
+        </RelativeLayout>
+
+        <VideoView style="@style/style_divide_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/person_info"
+                style="@style/personal_text_title"
+                android:text="@string/introduce" />
+
+            <TextView
+                android:id="@+id/person_info_tv"
+                style="@style/style_personal_text_r"
+                android:layout_toRightOf="@id/person_info" />
+
+        </RelativeLayout>
     </LinearLayout>
 
+
+   <Button
+       android:id="@+id/person_save_btn"
+       android:layout_marginTop="40dp"
+       android:text="@string/save"
+       style="@style/style_login_btn"/>
 </LinearLayout>

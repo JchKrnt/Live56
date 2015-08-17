@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sohu.live56.view.login.PersonalSettingActivity">
+
+    <include layout="@layout/personal_head_img_layout" />
+
+    <LinearLayout
+        style="@style/login_input_area"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/person_name"
+                style="@style/personal_text_title"
+                android:text="@string/user_name" />
+
+            <TextView
+                android:id="@+id/person_name_tv"
+                style="@style/style_personal_text_r"
+                android:layout_toRightOf="@id/person_name"
+                android:text="Angelababy" />
+
+        </RelativeLayout>
+
+        <VideoView style="@style/style_divide_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/person_tel"
+                style="@style/personal_text_title"
+                android:text="@string/tel_num" />
+
+            <TextView
+                android:id="@+id/person_tel_tv"
+                style="@style/style_personal_text_r"
+                android:layout_toRightOf="@id/person_tel" />
+
+        </RelativeLayout>
+
+        <VideoView style="@style/style_divide_line" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+            <TextView
+                android:id="@+id/person_info"
+                style="@style/personal_text_title"
+                android:text="@string/user_info" />
+
+            <TextView
+                android:id="@+id/person_info_tv"
+                style="@style/style_personal_text_r"
+                android:layout_toRightOf="@id/person_info" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        style="@style/style_18_b_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="17dp"
+        android:text="@string/unit_link" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/personal_microblog"
+            style="@style/style_login_icon"
+            android:layout_centerInParent="true"
+            android:drawableTop="@mipmap/weibo"
+            android:text="@string/mcir_blog" />
+
+        <TextView
+            android:id="@+id/personal_weixin"
+            style="@style/style_login_icon"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="45dp"
+            android:layout_toLeftOf="@id/personal_microblog"
+            android:drawableTop="@mipmap/weixin"
+            android:text="@string/weixin" />
+
+        <TextView
+            android:id="@+id/personal_qq"
+            style="@style/style_login_icon"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="45dp"
+            android:layout_toRightOf="@id/personal_microblog"
+            android:drawableTop="@mipmap/qq"
+            android:text="@string/qq" />
+    </RelativeLayout>
+</LinearLayout>

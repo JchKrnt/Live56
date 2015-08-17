@@ -44,6 +44,10 @@
             android:name=".view.login.PersonalSettingActivity"
             android:label="@string/title_activity_personal_setting" >
         </activity>
+        <activity
+            android:name=".view.login.PersonalInfoActivity"
+            android:label="@string/title_activity_personal_info" >
+        </activity>
     </application>
 
 </manifest>

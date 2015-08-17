@@ -45,6 +45,15 @@
     <string name="input_check_num">请输入您的验证码</string>
     <string name="get_check">获取验证码</string>
     <string name="modity_head_img">修改头像</string>
+    <string name="user_name">用户名</string>
+    <string name="tel_num">手机号</string>
+    <string name="un_input">未填写</string>
+    <string name="user_info">个人简介</string>
+    <string name="unit_link">合作账号绑定</string>
+    <string name="save">保存</string>
+    <string name="update_name">完善您的昵称</string>
+    <string name="introduce">简单介绍一下自己吧</string>
     <string name="title_activity_personal_setting">PersonalSettingActivity</string>
+    <string name="title_activity_personal_info">PersonalInfoActivity</string>
 </resources>
 

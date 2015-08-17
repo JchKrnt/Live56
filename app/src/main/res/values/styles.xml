@@ -172,6 +172,12 @@
         <item name="android:textSize">@dimen/font_16</item>
     </style>
 
+    <style name="style_login_etv" parent="style_login_et_text">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
+
     <style name="style_divide_line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
@@ -181,7 +187,7 @@
     <style name="login_input_area">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@drawable/login_input_area</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -191,6 +197,30 @@
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginRight">20dp</item>
         <item name="android:background">@drawable/orange_btn_sel</item>
+    </style>
+
+    <style name="personal_text_title">
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textColor">@color/black_font</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+    <style name="style_personal_text_r">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textColor">@color/black_font</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:gravity">center_vertical|right</item>
+        <item name="android:drawableRight">@mipmap/arrow</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:hint">@string/un_input</item>
+        <item name="android:colorBackgroundCacheHint">@color/hint_font</item>
     </style>
 
 </resources>

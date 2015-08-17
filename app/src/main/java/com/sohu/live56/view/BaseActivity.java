@@ -1,8 +1,6 @@
 package com.sohu.live56.view;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.FrameLayout;
