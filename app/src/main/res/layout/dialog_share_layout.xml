@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/share_dialog_tilte"
+        style="@style/style_dialog_tiltl"
+        android:layout_height="wrap_content"
+        android:paddingBottom="14dp"
+        android:paddingTop="14dp"
+        android:text="@string/share_to" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/tab_gray_divide" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TableRow style="@style/style_dialog_tr">
+
+            <TextView
+                android:id="@+id/weixin_tv"
+                style="@style/dialog_share_item"
+                android:drawableTop="@mipmap/weixin"
+                android:text="@string/weixin" />
+
+            <TextView
+                android:id="@+id/friends_tv"
+                style="@style/dialog_share_item"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:drawableTop="@mipmap/circle"
+                android:text="@string/friends" />
+
+            <TextView
+                android:id="@+id/microblog_tv"
+                style="@style/dialog_share_item"
+                android:drawableTop="@mipmap/weibo"
+                android:text="@string/mcir_blog" />
+
+        </TableRow>
+
+        <TableRow style="@style/style_dialog_tr">
+
+            <TextView
+                android:id="@+id/qq_friends_tv"
+                style="@style/dialog_share_item"
+                android:drawableTop="@mipmap/qq"
+                android:text="@string/qq_friend" />
+
+            <TextView
+                android:id="@+id/qq_zone_tv"
+                style="@style/dialog_share_item"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:drawableTop="@mipmap/qqzone"
+                android:text="@string/qq_zone" />
+
+            <TextView
+                android:id="@+id/copy_link_tv"
+                style="@style/dialog_share_item"
+                android:drawableTop="@mipmap/link"
+                android:text="@string/copy_link" />
+
+        </TableRow>
+    </TableLayout>
+
+    <ImageButton
+        android:id="@+id/share_cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="25dp"
+        android:background="@null"
+        android:src="@drawable/cancel_sel" />
+
+</LinearLayout>

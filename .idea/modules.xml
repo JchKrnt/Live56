@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Live56.iml" filepath="$PROJECT_DIR$/Live56.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/gif-drawable/gif-drawable.iml" filepath="$PROJECT_DIR$/gif-drawable/gif-drawable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/testutil/testutil.iml" filepath="$PROJECT_DIR$/testutil/testutil.iml" />
       <module fileurl="file://$PROJECT_DIR$/utillib/utillib.iml" filepath="$PROJECT_DIR$/utillib/utillib.iml" />
     </modules>
   </component>

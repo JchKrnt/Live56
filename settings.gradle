@@ -1,1 +1,1 @@
-include ':app', ':utillib', ':gif-drawable'
+include ':app', ':utillib', ':gif-drawable', ':testutil'

@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sohu.live56.view.login.PersonalSettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/setting_top_img_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.jch.utillib.view.CircleImageView
+            android:id="@+id/set_head_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/weibo"
+            app:border_width="0dp" />
+
+        <TextView
+            android:id="@+id/set_modify_btn"
+            style="@style/font_13_w"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/set_modity_head_btn_bg"
+            android:padding="5dp"
+            android:text="@string/modity_head_img" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

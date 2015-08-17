@@ -1,6 +1,7 @@
 package com.sohu.live56.view.main.player;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.jch.utillib.view.CircleImageView;
 import com.sohu.live56.R;
+import com.sohu.live56.view.util.LiveAlertDialog;
+import com.sohu.live56.view.util.ShareDialog;
 
 /**
  * A  {@link BasePlayerFrag} subclass.
@@ -30,6 +33,8 @@ public class ObserverFrag extends BasePlayerFrag implements View.OnClickListener
     private TextView videofragnum;
     private LinearLayout videofragbtm;
 
+    private ObserverEvent observerEvent;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -46,6 +51,16 @@ public class ObserverFrag extends BasePlayerFrag implements View.OnClickListener
 
     public ObserverFrag() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof ObserverEvent) {
+            this.observerEvent = (ObserverEvent) activity;
+        } else {
+            throw new ClassCastException("the activity can't be cast to ObserverEvent");
+        }
     }
 
     @Override
@@ -85,15 +100,23 @@ public class ObserverFrag extends BasePlayerFrag implements View.OnClickListener
 
         switch (v.getId()) {
             case R.id.video_frag_close: {
-                Toast.makeText(getActivity().getApplicationContext(), "close", Toast.LENGTH_SHORT).show();
+
+                observerEvent.stopVideo();
                 break;
             }
 
             case R.id.video_frag_share: {
-                Toast.makeText(getActivity().getApplicationContext(), "share", Toast.LENGTH_SHORT).show();
+
+                showShareDialog();
                 break;
             }
         }
+    }
 
+    private void showShareDialog() {
+
+        LiveAlertDialog.Builder builder = new LiveAlertDialog.Builder();
+        ShareDialog shareDialog = (ShareDialog) builder.create(new ShareDialog(getActivity()));
+        shareDialog.show();
     }
 }

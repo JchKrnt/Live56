@@ -139,6 +139,14 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
         }
     }
 
+    public void checkRightBtn() {
+        rightBtn.setChecked(true);
+    }
+
+    public void checkLeftBtn() {
+        leftBtn.setChecked(true);
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);

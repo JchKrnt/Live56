@@ -1,5 +1,7 @@
 package com.sohu.live56.view.main;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
@@ -11,14 +13,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.sohu.live56.R;
+import com.sohu.live56.app.LiveApp;
+import com.sohu.live56.bean.UserInfo;
+import com.sohu.live56.view.BaseFragment;
+import com.sohu.live56.view.login.LoginActivity;
+import com.sohu.live56.view.main.personal.LoginFrag;
 import com.sohu.live56.view.main.personal.PersonalFrag;
 import com.sohu.live56.view.main.square.SquareFrag;
 import com.sohu.live56.view.util.HomeTabHost;
+import com.sohu.live56.view.util.HomeTabHost.OnTabButonCheckedListener;
 
 /**
  * 主页。
  */
-public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabButonCheckedListener {
+
+public class MainActivity extends FragmentActivity implements OnTabButonCheckedListener, MainfragmentCallBack {
 
     private HomeTabHost tabHost;
     private FrameLayout tabContent;
@@ -28,7 +37,16 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
 
     private PersonalFrag personalFrag;
     private SquareFrag squareFrag;
+    private static final int LOGIN_CODE = 45;
+
+
     private FragmentTransaction ft;
+
+    @Override
+    public void login() {
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +85,31 @@ public class MainActivity extends FragmentActivity implements HomeTabHost.OnTabB
 
     @Override
     public void onRightChecked(View view) {
-        ft = getSupportFragmentManager().beginTransaction();
-        if (personalFrag == null)
-            personalFrag = PersonalFrag.newInstance();
-        ft.replace(android.R.id.tabcontent, personalFrag);
-        ft.commit();
+
+        if (((LiveApp) getApplication()).checkLogin()) {        //已登录
+
+            ft = getSupportFragmentManager().beginTransaction();
+            if (personalFrag == null)
+                personalFrag = PersonalFrag.newInstance();
+            ft.replace(android.R.id.tabcontent, personalFrag);
+            ft.commit();
+        } else {            //没有登录
+            LoginFrag loginFrag = LoginFrag.instance();
+            ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(tabContent.getId(), loginFrag);
+            ft.commit();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

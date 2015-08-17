@@ -2,14 +2,20 @@
 <resources>
 
     <color name="white">#FFFFFF</color>
+    <color name="a_white">#ccFFFFFF</color>
     <color name="orange">#EF5F3D</color>
+    <color name="btn_pink">#ff6642</color>
     <color name="gray_bg">#eeeeee</color>
     <color name="tab_gray_divide">#cccccc</color>
     <color name="black_font">#1f1f1f</color>
+    <color name="gray_press">#454545</color>
+    <color name="hint_font">#adadad</color>
     <color name="gray_font">#9A9A9A</color>
     <color name="alpha_list_bg">#aaffffff</color>
     <color name="alaha_edit_bg">#aa020202</color>
     <color name="text_gray_bg">#2b2c19</color>
     <color name="blue">#0000ff</color>
+    <color name="purple_dark">#8a5a75</color>
+    <color name="purple_light">#c06978</color>
 
 </resources>

@@ -40,7 +40,7 @@ public class ObserverActivity extends PlayerActivity implements ObserverEvent {
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
         ObserverFrag observerFrag = ObserverFrag.newInstance();
         ft.replace(contentViewId, observerFrag);
-        ft.addToBackStack("observerFrag");
+//        ft.addToBackStack("observerFrag");
         ft.commit();
     }
 
@@ -78,6 +78,8 @@ public class ObserverActivity extends PlayerActivity implements ObserverEvent {
     @Override
     public void stopVideo() {
 
+        onBackPressed();
+        this.finish();
     }
 
     /**

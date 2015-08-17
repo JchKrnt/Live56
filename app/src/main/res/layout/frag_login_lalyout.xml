@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout style="@style/style_title_bar">
+
+
+        <TextView
+            style="@style/style_title_font"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/tab_gray_divide" />
+
+    <ScrollView
+        android:id="@+id/base_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                style="@style/style_18_b_text"
+                android:layout_marginTop="60dp"
+                android:text="@string/unit_login" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/login_weixin_tv"
+                    style="@style/style_login_icon"
+                    android:drawableTop="@mipmap/weixin"
+                    android:text="@string/weixin" />
+
+                <TextView
+                    android:id="@+id/login_microblog_tv"
+                    style="@style/style_login_icon"
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="45dp"
+                    android:drawableTop="@mipmap/weibo"
+                    android:text="@string/mcir_blog" />
+
+                <TextView
+                    android:id="@+id/login_qq_tv"
+                    style="@style/style_login_icon"
+                    android:drawableTop="@mipmap/qq"
+                    android:text="@string/qq" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="50dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    android:background="@color/tab_gray_divide" />
+
+                <TextView
+                    style="@style/font_12_b_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/or" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1px"
+                    android:layout_weight="1"
+                    android:background="@color/tab_gray_divide" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/style_18_b_text"
+                android:layout_marginTop="50dp"
+                android:text="@string/tel_register" />
+
+            <Button
+                android:id="@+id/login_btn"
+                style="@style/style_18_w_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/orange_btn_sel"
+                android:text="@string/tel_login" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

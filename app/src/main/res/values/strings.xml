@@ -8,7 +8,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    
+
     <integer-array name="tab_ids">
         <item>@android:id/tabcontent</item>
         <item>@id/tab_bg_view_divid</item>
@@ -17,9 +17,34 @@
         <item>@id/tab_right_btn1</item>
         <item>@id/tab_center_btn</item>
     </integer-array>
-    
+
     <string name="find">发现</string>
     <string name="square_nodate">世界太安静，环没有数据</string>
     <string name="title_activity_test">TestActivity</string>
+
+    <string name="share_to">分享到</string>
+    <string name="weixin">微信好友</string>
+    <string name="friends">朋友圈</string>
+    <string name="mcir_blog">微博</string>
+    <string name="qq">QQ</string>
+    <string name="qq_friend">QQ好友</string>
+    <string name="qq_zone">QQ空间</string>
+    <string name="copy_link">复制链接</string>
+    <string name="login">登录</string>
+    <string name="unit_login">合作账号登录</string>
+    <string name="or">或者</string>
+
+    <string name="tel_register">手机号注册登录</string>
+    <string name="tel_login">手机号登录</string>
+
+    <string name="title_unit_login">联合登录</string>
+    <string name="input_account">请输入您的账号</string>
+    <string name="input_pwd">请输入您的密码</string>
+
+    <string name="input_tel">请输入您的手机号</string>
+    <string name="input_check_num">请输入您的验证码</string>
+    <string name="get_check">获取验证码</string>
+    <string name="modity_head_img">修改头像</string>
+    <string name="title_activity_personal_setting">PersonalSettingActivity</string>
 </resources>
 

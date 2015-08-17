@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sohu.live56.view.login.TelActivity">
+
+    <LinearLayout
+        style="@style/login_input_area"
+        android:layout_marginTop="25dp">
+
+        <EditText
+            android:id="@+id/input_tel"
+            style="@style/style_login_et"
+            android:drawableLeft="@mipmap/login_cellphone"
+            android:hint="@string/input_tel" />
+
+        <View
+            style="@style/style_divide_line"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingLeft="25dp"
+            android:paddingRight="12dp">
+
+            <EditText
+                android:id="@+id/input_check_et"
+                style="@style/style_login_et_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableLeft="@mipmap/login_proving"
+                android:hint="@string/input_check_num" />
+
+            <TextView
+                android:id="@+id/input_check_tv"
+                style="@style/font_16_o_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/get_check" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/login_btn"
+        style="@style/style_login_btn"
+        android:layout_marginTop="60dp"
+        android:text="@string/login" />
+</LinearLayout>
