@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="JchSwitchButton">
+
+        <attr name="onBtn" format="reference"></attr>
+        <attr name="offBtn" format="reference"></attr>
+        <attr name="switch_flage" format="boolean"></attr>
+    </declare-styleable>
+
+</resources>

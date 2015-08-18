@@ -1,15 +1,135 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
     android:clickable="true"
+    android:orientation="vertical"
     tools:context="com.sohu.live56.view.main.personal.PersonalFrag">
 
-    <include
-        layout="@layout/square_list_item_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
-</FrameLayout>
+        android:background="@drawable/setting_top_img_bg"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/head_height">
+
+            <TextView
+                style="@style/style_title_font"
+                android:text="@string/personal_center"
+                android:textColor="@color/white" />
+
+            <ImageButton
+                android:id="@+id/person_center_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:paddingRight="12dp"
+                android:src="@mipmap/individual_setting" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.jch.utillib.view.CircleImageView
+                android:id="@+id/personal_center_head_img"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/login_account" />
+
+            <TextView
+                android:id="@+id/personal_center_name_tv"
+                style="@style/style_18_w_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Angelababy" />
+
+            <TextView
+                android:id="@+id/personal_center_subname_tv"
+                style="@style/font_12_w_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="中文名杨毅，模特、演员" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/personal_center_weixin"
+                    style="@style/style_center_link_icon"
+                    android:drawableLeft="@mipmap/individual_weixing"
+                    android:text="@string/weixin" />
+
+                <TextView
+                    android:id="@+id/personal_center_microblog"
+                    style="@style/style_center_link_icon"
+                    android:drawableLeft="@mipmap/individual_weibo"
+                    android:text="@string/mcir_blog" />
+
+                <TextView
+                    android:id="@+id/personal_center_qq"
+                    style="@style/style_center_link_icon"
+                    android:drawableLeft="@mipmap/individual_qq"
+                    android:text="@string/qq" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp">
+
+        <View style="@style/style_divide_line_weight" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="@string/live_record"
+            android:textColor="@color/gray_font"
+            android:textSize="@dimen/font_name_12" />
+
+        <View style="@style/style_divide_line_weight" />
+    </LinearLayout>
+
+    <!--<ListView-->
+    <!--android:id="@+id/personal_center_list"-->
+    <!--style="@style/style_live_lv"-->
+    <!--android:background="@color/orange"></ListView>-->
+
+    <ViewStub
+        android:id="@+id/personal_lv_vs"
+        style="@style/style_live_lv"
+        android:layout_weight="1"
+        android:layout="@layout/personal_center_lv_layout" />
+
+    <ViewStub
+        android:id="@+id/nodata_vs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout="@layout/common_nodate_layout" />
+
+</LinearLayout>

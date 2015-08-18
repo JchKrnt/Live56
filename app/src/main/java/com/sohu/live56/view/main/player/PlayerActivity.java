@@ -43,4 +43,10 @@ public abstract class PlayerActivity extends BaseActivity {
 //        glviewcall = (GLSurfaceView) findViewById(R.id.glview_call);
         playerfragcontent = (FrameLayout) findViewById(R.id.player_frag_content);
     }
+
+
+    protected void stopVideo() {
+
+
+    }
 }

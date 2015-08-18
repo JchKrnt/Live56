@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/personal_center_list"
+    style="@style/style_live_lv"></ListView>

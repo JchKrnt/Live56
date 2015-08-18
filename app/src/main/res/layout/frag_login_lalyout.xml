@@ -49,7 +49,7 @@
                     android:id="@+id/login_weixin_tv"
                     style="@style/style_login_icon"
                     android:drawableTop="@mipmap/weixin"
-                    android:text="@string/weixin" />
+                    android:text="@string/weixin_friends" />
 
                 <TextView
                     android:id="@+id/login_microblog_tv"

@@ -1,16 +1,18 @@
 package com.sohu.live56.view.login;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.sohu.live56.R;
 import com.sohu.live56.view.BaseTitleActivity;
+import com.sohu.live56.view.main.MainActivity;
 
 /**
  * Created by jingbiaowang on 2015/8/17.
  */
-public class LoginActivity extends BaseTitleActivity {
+public class LoginActivity extends BaseTitleActivity implements View.OnClickListener {
 
 
     private TextView loginweixintv;
@@ -40,7 +42,42 @@ public class LoginActivity extends BaseTitleActivity {
         loginqqtv = (TextView) v.findViewById(R.id.login_qq_tv);
         loginbtn = (Button) v.findViewById(R.id.login_btn);
 
-
+        loginbtn.setOnClickListener(this);
+        loginmicroblogtv.setOnClickListener(this);
+        loginqqtv.setOnClickListener(this);
+        loginweixintv.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.login_btn: {
+                loginTel();
+
+                break;
+            }
+            case R.id.login_microblog_tv: {
+
+                break;
+            }
+            case R.id.login_qq_tv: {
+
+
+                break;
+            }
+            case R.id.login_weixin_tv: {
+                break;
+            }
+        }
+    }
+
+    private void loginTel() {
+        Intent intent = new Intent(LoginActivity.this, TelActivity.class);
+        startActivityForResult(intent, MainActivity.CENTER_LOGIN_CODE);
+        finish();
+    }
+
+
 }
 

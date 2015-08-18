@@ -19,6 +19,17 @@ public class UserInfo implements Parcelable {
     private String career;
     private String imgUrl;
     private LoginType loginType;
+    private String telNum;
+
+
+    public String getTelNum() {
+        return telNum;
+    }
+
+    public void setTelNum(String telNum) {
+        this.telNum = telNum;
+    }
+
 
     public String getName() {
         return name;
@@ -60,6 +71,7 @@ public class UserInfo implements Parcelable {
         this.loginType = loginType;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -68,10 +80,11 @@ public class UserInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
+        dest.writeString(this.pwd);
         dest.writeString(this.career);
         dest.writeString(this.imgUrl);
-        dest.writeString(this.loginType.name().toLowerCase());
-        dest.writeString(this.pwd);
+        dest.writeString(this.loginType.name());
+        dest.writeString(this.telNum);
     }
 
     public UserInfo() {
@@ -79,13 +92,14 @@ public class UserInfo implements Parcelable {
 
     protected UserInfo(Parcel in) {
         this.name = in.readString();
+        this.pwd = in.readString();
         this.career = in.readString();
         this.imgUrl = in.readString();
-        this.pwd = in.readString();
         this.loginType = LoginType.valueOf(in.readString().toUpperCase());
+        this.telNum = in.readString();
     }
 
-    public static final Parcelable.Creator<UserInfo> CREATOR = new Parcelable.Creator<UserInfo>() {
+    public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
         public UserInfo createFromParcel(Parcel source) {
             return new UserInfo(source);
         }

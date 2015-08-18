@@ -21,7 +21,7 @@
             android:id="@+id/login_weixin_tv"
             style="@style/style_login_icon"
             android:drawableTop="@mipmap/weixin"
-            android:text="@string/weixin" />
+            android:text="@string/weixin_friends" />
 
         <TextView
             android:id="@+id/login_microblog_tv"
@@ -74,8 +74,8 @@
 
     <Button
         android:id="@+id/login_btn"
+        style="@style/style_login_btn"
         android:layout_marginTop="35dp"
-        android:text="@string/tel_login"
-        style="@style/style_login_btn" />
+        android:text="@string/tel_login" />
 
 </LinearLayout>

@@ -13,7 +13,8 @@
             android:id="@+id/input_tel"
             style="@style/style_login_et"
             android:drawableLeft="@mipmap/login_cellphone"
-            android:hint="@string/input_tel" />
+            android:hint="@string/input_tel"
+            android:phoneNumber="true" />
 
         <View
             style="@style/style_divide_line"
@@ -34,7 +35,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableLeft="@mipmap/login_proving"
-                android:hint="@string/input_check_num" />
+                android:hint="@string/input_check_num"
+                android:numeric="integer" />
 
             <TextView
                 android:id="@+id/input_check_tv"

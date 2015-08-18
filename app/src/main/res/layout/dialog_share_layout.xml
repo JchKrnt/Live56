@@ -28,7 +28,7 @@
                 android:id="@+id/weixin_tv"
                 style="@style/dialog_share_item"
                 android:drawableTop="@mipmap/weixin"
-                android:text="@string/weixin" />
+                android:text="@string/weixin_friends" />
 
             <TextView
                 android:id="@+id/friends_tv"

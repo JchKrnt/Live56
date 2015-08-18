@@ -17,10 +17,7 @@
 
     <ListView
         android:id="@+id/square_lv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:dividerHeight="10dp"></ListView>
+        style="@style/style_live_lv"></ListView>
 
     <FrameLayout
         android:id="@+id/square_nodate_fl"

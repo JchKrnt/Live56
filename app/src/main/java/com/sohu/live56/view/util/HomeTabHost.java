@@ -46,6 +46,8 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
         public void onLeftChecked(View view);
 
         public void onRightChecked(View view);
+
+        public void onCenterClickedListener();
     }
 
 
@@ -125,6 +127,13 @@ public class HomeTabHost extends ViewGroup implements CompoundButton.OnCheckedCh
 
                 case R.id.tab_center_btn: {
                     centerImg = (ImageView) cView;
+                    centerImg.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (onTabButonCheckedListener != null)
+                                onTabButonCheckedListener.onCenterClickedListener();
+                        }
+                    });
                     break;
                 }
 

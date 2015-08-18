@@ -23,7 +23,8 @@
     <string name="title_activity_test">TestActivity</string>
 
     <string name="share_to">分享到</string>
-    <string name="weixin">微信好友</string>
+    <string name="weixin_friends">微信好友</string>
+    <string name="weixin">微信</string>
     <string name="friends">朋友圈</string>
     <string name="mcir_blog">微博</string>
     <string name="qq">QQ</string>
@@ -53,7 +54,7 @@
     <string name="save">保存</string>
     <string name="update_name">完善您的昵称</string>
     <string name="introduce">简单介绍一下自己吧</string>
-    <string name="title_activity_personal_setting">PersonalSettingActivity</string>
-    <string name="title_activity_personal_info">PersonalInfoActivity</string>
+    <string name="personal_center">个人中心</string>
+    <string name="live_record">直播记录</string>
 </resources>
 

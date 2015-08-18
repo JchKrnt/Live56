@@ -1,5 +1,6 @@
 package com.sohu.live56.view.main.personal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import com.sohu.live56.R;
 import com.sohu.live56.view.BaseFragment;
+import com.sohu.live56.view.login.TelActivity;
+import com.sohu.live56.view.main.MainActivity;
 import com.sohu.live56.view.main.MainfragmentCallBack;
 
 /**
  * Created by jingbiaowang on 2015/8/17.
  */
-public class LoginFrag extends BaseFragment {
+public class LoginFrag extends BaseFragment implements View.OnClickListener {
 
     private MainfragmentCallBack callBack;
     private TextView loginweixintv;
@@ -59,6 +62,48 @@ public class LoginFrag extends BaseFragment {
         loginqqtv = (TextView) v.findViewById(R.id.login_qq_tv);
         loginbtn = (Button) v.findViewById(R.id.login_btn);
 
+        loginbtn.setOnClickListener(this);
+        loginmicroblogtv.setOnClickListener(this);
+        loginqqtv.setOnClickListener(this);
+        loginweixintv.setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+
+            case R.id.login_btn: {
+                telLogin();
+                break;
+            }
+
+            case R.id.login_weixin_tv: {
+
+                break;
+            }
+
+            case R.id.login_microblog_tv: {
+
+                break;
+            }
+
+            case R.id.login_qq_tv: {
+
+                break;
+            }
+
+        }
+
+    }
+
+    private void telLogin() {
+        Intent intent = new Intent(getActivity(), TelActivity.class);
+        getActivity().startActivityForResult(intent, MainActivity.LOGIN_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

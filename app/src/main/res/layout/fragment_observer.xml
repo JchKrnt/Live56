@@ -46,14 +46,8 @@
 
     <ImageButton
         android:id="@+id/video_frag_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@null"
-        android:paddingBottom="15dp"
-        android:paddingLeft="15dp"
-        android:src="@drawable/close_sel" />
+        android:src="@drawable/close_sel"
+        style="@style/style_video_close_btn" />
 
     <ImageView
         android:id="@+id/video_frag_logo"

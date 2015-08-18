@@ -95,7 +95,7 @@
             android:layout_marginRight="45dp"
             android:layout_toLeftOf="@id/personal_microblog"
             android:drawableTop="@mipmap/weixin"
-            android:text="@string/weixin" />
+            android:text="@string/weixin_friends" />
 
         <TextView
             android:id="@+id/personal_qq"

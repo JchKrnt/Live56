@@ -13,7 +13,7 @@ public class LiveApp extends Application {
 
     private SharedPreferences spf;
 
-    private UserInfo userInfo = new UserInfo();
+    private UserInfo userInfo;
 
     @Override
     public void onCreate() {
@@ -36,13 +36,20 @@ public class LiveApp extends Application {
     public void saveUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
         SharedPreferences.Editor edit = spf.edit();
-        edit.putString("name", userInfo.getName());
-        edit.putString("pwd", userInfo.getPwd());
-        edit.putString("imgUrl", userInfo.getImgUrl());
-        edit.putString("loginType", userInfo.getLoginType().name());
-        edit.putString("career", userInfo.getCareer());
+        edit.putString("name", null2S(userInfo.getName()));
+        edit.putString("pwd", null2S(userInfo.getPwd()));
+        edit.putString("imgUrl", null2S(userInfo.getImgUrl()));
+        edit.putString("loginType", null2S(userInfo.getLoginType().name()));
+        edit.putString("career", null2S(userInfo.getCareer()));
 
         edit.commit();
+    }
+
+    private String null2S(String str) {
+
+        if (str == null) {
+            return "";
+        } else return str;
     }
 
     public void saveUserName(String name) {
@@ -61,7 +68,7 @@ public class LiveApp extends Application {
 
     public boolean checkLogin() {
 
-        if (userInfo.getName() != null && !userInfo.equals(""))
+        if (userInfo != null)
             return true;
         else return false;
     }
