@@ -258,4 +258,24 @@
         <item name="android:paddingLeft">15dp</item>
     </style>
 
+    <style name="style_live_switch_btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <style name="style_width_weight_line">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
+    <style name="style_width_weight_2_line">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+
 </resources>

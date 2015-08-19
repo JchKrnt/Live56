@@ -56,5 +56,6 @@
     <string name="introduce">简单介绍一下自己吧</string>
     <string name="personal_center">个人中心</string>
     <string name="live_record">直播记录</string>
+    <string name="live_title_hint">给你的直播起个响亮的标题吧</string>
 </resources>
 

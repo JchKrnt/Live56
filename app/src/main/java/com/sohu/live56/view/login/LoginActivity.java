@@ -72,10 +72,18 @@ public class LoginActivity extends BaseTitleActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MainActivity.CENTER_LOGIN_CODE && resultCode == RESULT_OK) {
+            setResult(RESULT_OK, data);
+            this.finish();
+        }
+    }
+
     private void loginTel() {
         Intent intent = new Intent(LoginActivity.this, TelActivity.class);
         startActivityForResult(intent, MainActivity.CENTER_LOGIN_CODE);
-        finish();
     }
 
 

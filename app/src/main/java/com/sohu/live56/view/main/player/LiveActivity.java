@@ -1,6 +1,10 @@
 package com.sohu.live56.view.main.player;
 
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 /**
@@ -8,9 +12,18 @@ import android.view.View;
  */
 public class LiveActivity extends PlayerActivity implements LiveEvent {
 
+    private int containerViewId;
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onAddFragment(int contentViewId) {
 
+        this.containerViewId = contentViewId;
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        LiveFrag liveFrag = LiveFrag.newInstance();
+        ft.add(contentViewId, liveFrag);
+        ft.commitAllowingStateLoss();
     }
 
     @Override

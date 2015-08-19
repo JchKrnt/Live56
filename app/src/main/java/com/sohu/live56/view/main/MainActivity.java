@@ -119,9 +119,11 @@ public class MainActivity extends FragmentActivity implements OnTabButonCheckedL
 
         if (requestCode == LOGIN_CODE && resultCode == RESULT_OK) {
             ((LiveApp) getApplication()).saveUserInfo(data.<UserInfo>getParcelableExtra(DATA_Key));
-            loginSuccess();
+            loginSuccessOnPersonal();
         } else if (requestCode == CENTER_LOGIN_CODE && resultCode == RESULT_OK) {
 
+            ((LiveApp) getApplication()).saveUserInfo(data.<UserInfo>getParcelableExtra(DATA_Key));
+            loginSuccessOnLive();
             //TODO
         }
 
@@ -132,7 +134,13 @@ public class MainActivity extends FragmentActivity implements OnTabButonCheckedL
 
     }
 
-    private void loginSuccess() {
+    private void loginSuccessOnLive() {
+
+        Intent intent = new Intent(MainActivity.this, LiveActivity.class);
+        startActivity(intent);
+    }
+
+    private void loginSuccessOnPersonal() {
         ft = getSupportFragmentManager().beginTransaction();
         if (personalFrag == null)
             personalFrag = PersonalFrag.newInstance();

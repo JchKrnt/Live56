@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LiveButton">
+
+        <attr name="prepare_src" format="reference" />
+        <attr name="play_src" format="reference"></attr>
+        <attr name="pause_src" format="reference" />
+    </declare-styleable>
+</resources>

@@ -46,8 +46,8 @@
 
     <ImageButton
         android:id="@+id/video_frag_close"
-        android:src="@drawable/close_sel"
-        style="@style/style_video_close_btn" />
+        style="@style/style_video_close_btn"
+        android:src="@drawable/close_sel" />
 
     <ImageView
         android:id="@+id/video_frag_logo"
