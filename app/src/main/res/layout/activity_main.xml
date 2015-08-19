@@ -17,7 +17,7 @@
         <View
             android:id="@id/tab_bg_view_divid"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="1px"
             android:background="@color/tab_gray_divide" />
 
         <View

@@ -1,1 +1,1 @@
-include ':app', ':utillib', ':gif-drawable', ':testutil'
+include ':app', ':utillib', ':gif-drawable', ':testutil', ':kurentrtclib'
