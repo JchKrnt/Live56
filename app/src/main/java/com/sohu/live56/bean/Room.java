@@ -14,7 +14,7 @@ public class Room implements Parcelable {
         LIVING, OVER;
     }
 
-    private int id;
+    private String id;
     private String title;
     private State state;
 
@@ -26,7 +26,7 @@ public class Room implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeString(this.id);
         dest.writeString(this.title);
         dest.writeString(this.state.name());
     }
@@ -35,7 +35,7 @@ public class Room implements Parcelable {
     }
 
     protected Room(Parcel in) {
-        this.id = in.readInt();
+        this.id = in.readString();
         this.title = in.readString();
         this.state = State.valueOf(in.readString());
     }
@@ -50,11 +50,11 @@ public class Room implements Parcelable {
         }
     };
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

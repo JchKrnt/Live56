@@ -30,7 +30,7 @@ public class ObserverActivity extends PlayerActivity implements ObserverEvent {
         ft.add(fContentId, frag);
         ft.commit();
 
-        videoTimer();
+//        videoTimer();
 
     }
 
@@ -80,6 +80,16 @@ public class ObserverActivity extends PlayerActivity implements ObserverEvent {
 
         onBackPressed();
         this.finish();
+    }
+
+    @Override
+    public void onLiveLoading() {
+
+    }
+
+    @Override
+    public void onLiveLoaded() {
+
     }
 
     /**

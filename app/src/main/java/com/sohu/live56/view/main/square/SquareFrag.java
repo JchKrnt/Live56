@@ -14,13 +14,20 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sohu.kurento.netClient.KWWebSocketClient;
+import com.sohu.kurento.util.LooperExecutor;
 import com.sohu.live56.R;
 import com.sohu.live56.bean.Room;
+import com.sohu.live56.util.Constants;
+import com.sohu.live56.util.LogCat;
 import com.sohu.live56.view.main.player.ObserverActivity;
 import com.sohu.live56.view.main.player.ObserverFrag;
 
 import java.util.ArrayList;
+
+import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 广场 fragment .
@@ -35,8 +42,12 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
     private TextView titletv;
     private ListView squarelv;
     private FrameLayout squarenodatefl;
-
     private SquareAdapter squareAdapter;
+    private KWWebSocketClient socketClient = null;
+    private boolean webSocketOk = false;
+    private GifImageView progressImg = null;
+
+    public static final String MASTER_KEY = "masterId";
     // TODO: Rename parameter arguments, choose names that match
 
     public static SquareFrag newInstance() {
@@ -54,7 +65,11 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-
+        LogCat.debug("squareFragment create()----");
+        socketClient = KWWebSocketClient.getInstance();
+        socketClient.setExecutor(new LooperExecutor());
+        socketClient.setListListener(new ListListener());
+        socketClient.connect(Constants.HOST_URL);
     }
 
     @Override
@@ -63,7 +78,6 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_square, container, false);
         initialize(view);
-        initData();
         return view;
     }
 
@@ -77,6 +91,12 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         super.onDetach();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        socketClient.close();
+    }
+
     private void initialize(View view) {
 
         titletv = (TextView) view.findViewById(R.id.title_tv);
@@ -84,38 +104,112 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         squarelv.setSelector(new BitmapDrawable());
         squarelv.setOnItemClickListener(this);
         squarenodatefl = (FrameLayout) view.findViewById(R.id.square_nodate_fl);
+        progressImg = (GifImageView) view.findViewById(R.id.wifi_progress);
 
         squareAdapter = new SquareAdapter(getActivity().getApplicationContext());
         squarelv.setAdapter(squareAdapter);
+
+        requestData();
     }
 
-    private void initData() {
+    /**
+     * init data to listview.
+     *
+     * @param rooms
+     */
+    private void initData(ArrayList<Room> rooms) {
+        if (rooms != null && rooms.size() > 0) {
+            hasData();
+            squareAdapter.notifyDataSetChanged(rooms);
+        } else
+            noData();
 
-        ArrayList<Room> tempData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-
-            Room room = new Room();
-            room.setId(i);
-            room.setTitle("room" + i);
-            tempData.add(room);
-        }
-
-        squareAdapter.notifyDataSetChanged(tempData);
-        hasData(tempData);
     }
 
-    private void hasData(ArrayList<Room> data) {
-        if (data.size() > 0) {
-            squarenodatefl.setVisibility(View.GONE);
+    /**
+     * get list data. Show progress icon if websocket is connecttiong.
+     * Show no data if websocket connected failed.
+     */
+    private void requestData() {
+        if (webSocketOk) {
+            socketClient.sendListerRequest();
+
         } else {
-            squarenodatefl.setVisibility(View.VISIBLE);
+            noData();
         }
+
+    }
+
+    private void noData() {
+
+        squarenodatefl.setVisibility(View.VISIBLE);
+        progressImg.setVisibility(View.GONE);
+    }
+
+    private void progressWifi() {
+        squarenodatefl.setVisibility(View.VISIBLE);
+        progressImg.setVisibility(View.VISIBLE);
+    }
+
+    private void hasData() {
+        squarenodatefl.setVisibility(View.GONE);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Intent intent = new Intent(getActivity(), ObserverActivity.class);
+        SquareAdapter adapter = (SquareAdapter) parent.getAdapter();
+        Room room = (Room) adapter.getItem(position);
+        intent.putExtra(MASTER_KEY, String.valueOf(room.getId()));
+        LogCat.debug("start room Id : " + room.getId());
         startActivity(intent);
+    }
+
+    private class ListListener implements KWWebSocketClient.OnListListener {
+
+        @Override
+        public void onListListener(final ArrayList<String> masters) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    ArrayList<Room> rooms = new ArrayList<Room>();
+                    for (String roomId : masters) {
+                        Room room = new Room();
+                        room.setId(roomId);
+                        room.setTitle("room " + roomId);
+                        rooms.add(room);
+                    }
+
+                    initData(rooms);
+                }
+            });
+        }
+
+        @Override
+        public void onConnectionOpened() {
+            webSocketOk = true;
+            requestData();
+        }
+
+        @Override
+        public void onError(final String msg) {
+//            webSocketOk = false;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    initData(null);
+//                    Toast.makeText(getActivity().getApplicationContext(), "websocket connect failed : " + msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+        @Override
+        public void onClose(String msg) {
+//            webSocketOk = false;
+            LogCat.debug("websocket colsed...." + msg);
+        }
     }
 }

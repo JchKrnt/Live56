@@ -119,7 +119,6 @@ public class WebSocketChannel {
             case CONNECTED: {
 
                 for (String sendMsg : msges) {
-
                     wsc.sendTextMessage(sendMsg);
                     LogCat.debug("send msg ====:" + msg);
                 }
@@ -146,13 +145,12 @@ public class WebSocketChannel {
     public void disconnect(final boolean waitForComplete) {
 
         //TODO send server to disconnect server.
-
         checkvalidThreadMethod(new ValidThreadCall() {
             @Override
             public void onValidThread() {
                 if (wsc.isConnected()) {
                     wsc.disconnect();
-
+                    LogCat.debug("websocket closed!");
                     if (waitForComplete) {
 
                         synchronized (waitLock) {
@@ -174,10 +172,10 @@ public class WebSocketChannel {
 
     class KWebSocketObserver implements WebSocket.WebSocketConnectionObserver {
 
-
         @Override
         public void onOpen() {
             state = WebSocketState.CONNECTED;
+            LogCat.debug("KWebSocket opened !");
             lockEvent = false;
             wsEvents.onConnected();
         }
@@ -190,6 +188,7 @@ public class WebSocketChannel {
                 lockEvent = true;
                 waitLock.notify();
             }
+            LogCat.debug("KWebSocke closed !");
             checkvalidThreadMethod(new ValidThreadCall() {
                 @Override
                 public void onValidThread() {
@@ -201,6 +200,7 @@ public class WebSocketChannel {
 
         @Override
         public void onTextMessage(final String s) {
+            LogCat.debug("receive msg on Wschannnel***: " + s);
             checkvalidThreadMethod(new ValidThreadCall() {
                 @Override
                 public void onValidThread() {

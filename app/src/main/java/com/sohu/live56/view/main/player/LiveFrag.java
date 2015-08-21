@@ -1,5 +1,6 @@
 package com.sohu.live56.view.main.player;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import com.sohu.live56.view.util.LiveButton;
  */
 public class LiveFrag extends BaseFragment implements View.OnClickListener {
 
-
     private TextView livelocaltiontv;
     private ImageButton videofragclose;
     private ImageButton livecameraib;
@@ -40,10 +40,15 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
     private TextView livetimetv;
     private LiveButton livestatebtn;
     private RelativeLayout livebtmfl;
+    private static final String RELOAD_KEY = "reload";
+    private boolean reload = false;
 
-    public static LiveFrag newInstance() {
+    private LiveEvent liveEvent;
+
+    public static LiveFrag newInstance(boolean reload) {
         LiveFrag fragment = new LiveFrag();
         Bundle args = new Bundle();
+        args.putBoolean(RELOAD_KEY, reload);
 
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +67,6 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -70,6 +74,8 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_live, container, false);
+        reload = getArguments().getBoolean(RELOAD_KEY);
+
         initialize(view);
         return view;
     }
@@ -91,11 +97,22 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
         livestatebtn = (LiveButton) view.findViewById(R.id.live_state_btn);
         livebtmfl = (RelativeLayout) view.findViewById(R.id.live_btm_fl);
 
+        if (reload)
+            livebtmtitlell.setVisibility(View.GONE);
         livecameraib.setOnClickListener(this);
         JchSwitchButton.OnJchSwitchListener switchListener = new MyJchSwitchListener();
         liveflishlightsb.setJchSwitchListener(switchListener);
         livevoicesb.setJchSwitchListener(switchListener);
+        livestatebtn.setOnClickListener(this);
+        videofragclose.setOnClickListener(this);
 
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof LiveEvent)
+            this.liveEvent = (LiveEvent) activity;
     }
 
     @Override
@@ -104,17 +121,27 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.video_frag_close: {
-
+                liveEvent.stopVideo();
                 break;
             }
 
             case R.id.live_camera_ib: {
 
+                break;
+            }
+
+            case R.id.live_state_btn: {
+                playtLive();
+                break;
             }
         }
 
     }
 
+    private void playtLive() {
+
+        liveEvent.onPrepareLive();
+    }
 
     private class MyJchSwitchListener implements JchSwitchButton.OnJchSwitchListener {
 

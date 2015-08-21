@@ -21,14 +21,19 @@ public class LiveActivity extends PlayerActivity implements LiveEvent {
         this.containerViewId = contentViewId;
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        LiveFrag liveFrag = LiveFrag.newInstance();
+        LiveFrag liveFrag = LiveFrag.newInstance(false);
         ft.add(contentViewId, liveFrag);
         ft.commitAllowingStateLoss();
     }
 
     @Override
     public void onPrepareLive() {
+        onViewPrepared();
 
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        VideoWaitFrag waitFrag = VideoWaitFrag.newInstance();
+        ft.replace(containerViewId, waitFrag);
+        ft.commitAllowingStateLoss();
     }
 
     @Override
@@ -54,12 +59,16 @@ public class LiveActivity extends PlayerActivity implements LiveEvent {
 
     @Override
     public void stopVideo() {
-
+        this.finish();
     }
 
 
     @Override
     protected void onVideoConnected() {
-
+        fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        LiveFrag liveFrag = LiveFrag.newInstance(true);
+        ft.replace(containerViewId, liveFrag);
+        ft.commitAllowingStateLoss();
     }
 }

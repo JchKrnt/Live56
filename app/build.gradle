@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile project(':utillib')
     compile project(':gif-drawable')
+    compile project(':kurentrtclib')
 }

@@ -31,6 +31,13 @@
             android:text="@string/square_nodate"
             android:textColor="@color/gray_font"
             android:textSize="12dp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/wifi_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/nodata" />
     </FrameLayout>
 
 </LinearLayout>

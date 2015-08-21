@@ -105,11 +105,11 @@ public class MainActivity extends FragmentActivity implements OnTabButonCheckedL
     @Override
     public void onCenterClickedListener() {
 
-        if (!((LiveApp) getApplication()).checkLogin()) {       //没有登录。
-            startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), CENTER_LOGIN_CODE);
-        } else {
-            startActivity(new Intent(MainActivity.this, LiveActivity.class));
-        }
+//        if (!((LiveApp) getApplication()).checkLogin()) {       //没有登录。
+//            startActivityForResult(new Intent(MainActivity.this, LoginActivity.class), CENTER_LOGIN_CODE);
+//        } else {
+        startActivity(new Intent(MainActivity.this, LiveActivity.class));
+//        }
     }
 
 

@@ -9,6 +9,9 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 
+    <string name="channel_error_title">connect erro</string>
+    <string name="ok">确定</string>
+
     <integer-array name="tab_ids">
         <item>@android:id/tabcontent</item>
         <item>@id/tab_bg_view_divid</item>
@@ -57,5 +60,6 @@
     <string name="personal_center">个人中心</string>
     <string name="live_record">直播记录</string>
     <string name="live_title_hint">给你的直播起个响亮的标题吧</string>
+
 </resources>
 
