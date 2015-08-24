@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import de.tavendo.autobahn.WebSocket;
 import de.tavendo.autobahn.WebSocketConnection;
+import de.tavendo.autobahn.WebSocketConnectionHandler;
 import de.tavendo.autobahn.WebSocketException;
 
 /**
@@ -74,13 +75,10 @@ public class WebSocketChannel {
             @Override
             public void onValidThread() {
                 try {
-
                     LogCat.debug("websocket connect---------.");
-                    wsc.connect(new URI(wsUrl), new KWebSocketObserver());
+                    //handler is weakpreference.
+                    wsc.connect(wsUrl, new KWebSocketHandler());
                 } catch (WebSocketException e) {
-                    e.printStackTrace();
-                    WebSocketChannel.this.wsEvents.onError(e.getMessage());
-                } catch (URISyntaxException e) {
                     e.printStackTrace();
                     WebSocketChannel.this.wsEvents.onError(e.getMessage());
                 }
@@ -169,8 +167,7 @@ public class WebSocketChannel {
 
     }
 
-
-    class KWebSocketObserver implements WebSocket.WebSocketConnectionObserver {
+    class KWebSocketHandler implements WebSocket.ConnectionHandler {
 
         @Override
         public void onOpen() {
@@ -181,7 +178,7 @@ public class WebSocketChannel {
         }
 
         @Override
-        public void onClose(WebSocketCloseNotification webSocketCloseNotification, final String s) {
+        public void onClose(int i, final String s) {
             state = WebSocketState.CLOSED;
 
             synchronized (waitLock) {
@@ -207,7 +204,6 @@ public class WebSocketChannel {
                     wsEvents.onMessage(s);
                 }
             });
-
         }
 
         @Override
@@ -220,6 +216,57 @@ public class WebSocketChannel {
 
         }
     }
+
+//    class KWebSocketObserver implements WebSocket.WebSocketConnectionObserver {
+//
+//        @Override
+//        public void onOpen() {
+//            state = WebSocketState.CONNECTED;
+//            LogCat.debug("KWebSocket opened !");
+//            lockEvent = false;
+//            wsEvents.onConnected();
+//        }
+//
+//        @Override
+//        public void onClose(WebSocketCloseNotification webSocketCloseNotification, final String s) {
+//            state = WebSocketState.CLOSED;
+//
+//            synchronized (waitLock) {
+//                lockEvent = true;
+//                waitLock.notify();
+//            }
+//            LogCat.debug("KWebSocke closed !");
+//            checkvalidThreadMethod(new ValidThreadCall() {
+//                @Override
+//                public void onValidThread() {
+//                    wsEvents.onClosed(s);
+//                }
+//            });
+//
+//        }
+//
+//        @Override
+//        public void onTextMessage(final String s) {
+//            LogCat.debug("receive msg on Wschannnel***: " + s);
+//            checkvalidThreadMethod(new ValidThreadCall() {
+//                @Override
+//                public void onValidThread() {
+//                    wsEvents.onMessage(s);
+//                }
+//            });
+//
+//        }
+//
+//        @Override
+//        public void onRawTextMessage(byte[] bytes) {
+//
+//        }
+//
+//        @Override
+//        public void onBinaryMessage(byte[] bytes) {
+//
+//        }
+//    }
 
     interface ValidThreadCall {
 

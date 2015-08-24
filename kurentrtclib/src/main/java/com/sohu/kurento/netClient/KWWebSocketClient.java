@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * Created by jingbiaowang on 2015/7/22.
- * <p>
+ * <p/>
  * 网络访问。
  */
 public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWebSocket {
@@ -52,15 +52,21 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
 
     }
 
-    public static KWWebSocketClient getInstance() {
-        if (instance == null) {
-
-            LogCat.v("KWWebSocketClient new instance");
-            instance = new KWWebSocketClient();
-        } else {
-            LogCat.v("KWWebSocketClient old instance");
-        }
+    /**
+     * @return
+     */
+    public static KWWebSocketClient init() {
+        LogCat.v("KWWebSocketClient new instance");
+        instance = new KWWebSocketClient();
         return instance;
+    }
+
+    public static KWWebSocketClient getInstance() {
+
+        if (instance != null) {
+            return instance;
+        } else
+            throw new NullPointerException("websocket client instance is null.");
     }
 
     public void setExecutor(LooperExecutor executor) {

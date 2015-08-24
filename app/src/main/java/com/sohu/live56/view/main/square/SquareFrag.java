@@ -66,7 +66,7 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         if (getArguments() != null) {
         }
         LogCat.debug("squareFragment create()----");
-        socketClient = KWWebSocketClient.getInstance();
+        socketClient = KWWebSocketClient.init();
         socketClient.setExecutor(new LooperExecutor());
         socketClient.setListListener(new ListListener());
         socketClient.connect(Constants.HOST_URL);

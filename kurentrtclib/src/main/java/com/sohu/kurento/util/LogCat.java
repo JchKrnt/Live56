@@ -9,7 +9,7 @@ public class LogCat {
 
     private static boolean releaseAble = false;
 
-    private static final String TAG = "56_Kurento";
+    private static final String TAG = "SOHU_LIVE";
 
     public static void setRleaseable(boolean release) {
         releaseAble = release;
@@ -46,5 +46,12 @@ public class LogCat {
             return;
         } else
             Log.i(TAG, msg);
+    }
+
+    public static void w(String msg) {
+        if (releaseAble) {
+            return;
+        } else
+            Log.w(TAG, msg);
     }
 }
