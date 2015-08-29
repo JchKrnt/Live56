@@ -799,6 +799,16 @@ public class KWRtcSession implements KWSessionEvent {
         return newSdpDescription.toString();
     }
 
+    @Override
+    public void addRemoteCandidate(final IceCandidate candidate) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                peerConnection.addIceCandidate(candidate);
+            }
+        });
+    }
+
     public void close() {
         executor.execute(new Runnable() {
             @Override

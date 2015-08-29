@@ -195,6 +195,8 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
     @Override
     public void registerRoom(String name) {
 
+//        executor.execute(new );
+
     }
 
     public void sendSdp(final UserType userType, final String sdp, final String masterId) {

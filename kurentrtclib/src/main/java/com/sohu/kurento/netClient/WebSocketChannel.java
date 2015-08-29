@@ -3,13 +3,10 @@ package com.sohu.kurento.netClient;
 import com.sohu.kurento.util.LogCat;
 import com.sohu.kurento.util.LooperExecutor;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import de.tavendo.autobahn.WebSocket;
 import de.tavendo.autobahn.WebSocketConnection;
-import de.tavendo.autobahn.WebSocketConnectionHandler;
 import de.tavendo.autobahn.WebSocketException;
 
 /**

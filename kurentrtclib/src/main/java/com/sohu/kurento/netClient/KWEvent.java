@@ -1,5 +1,6 @@
 package com.sohu.kurento.netClient;
 
+import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
 
 /**
@@ -11,7 +12,11 @@ public interface KWEvent {
 
     //from server.
 
+    public void onRegisterRoom();
+
     public void onRemoteAnswer(String sdp);
+
+    public void onRemoteIceCandidate(final IceCandidate candidate);
 
     public void onDisconnect();
 
@@ -21,11 +26,30 @@ public interface KWEvent {
     //from peerconnection.
     public void onLocalSdp(SessionDescription localsdp);
 
+    /**
+     *
+     */
     public void onClientPrepareComplete();
 
+    /**
+     * Callback fired once local Ice candidate is generated.
+     *
+     * @param candidate
+     */
+    public void onIceCandidate(final IceCandidate candidate);
+
+    /**
+     * Callback fired once connection is established(IceConnectionState is CONNECTED).
+     */
     public void onIceConnected();
 
-    void onIceDisconnected();
+    /**
+     * Callback fired once connection is closed(IceConnectionoState is DISCONNECTED).
+     */
+    public void onIceDisconnected();
 
-    void onPeerConnectionClosed();
+    /**
+     * Callback fired once peer connection is closed.
+     */
+    public void onPeerConnectionClosed();
 }

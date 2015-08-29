@@ -22,6 +22,7 @@ import com.sohu.live56.util.LogCat;
 import com.sohu.live56.view.BaseActivity;
 import com.sohu.live56.view.main.square.SquareFrag;
 
+import org.webrtc.IceCandidate;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoRenderer;
@@ -329,6 +330,21 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
                 LogCat.debug("send sdp on Master");
             }
         }
+
+    }
+
+    @Override
+    public void onRegisterRoom() {
+
+    }
+
+    @Override
+    public void onRemoteIceCandidate(IceCandidate candidate) {
+
+    }
+
+    @Override
+    public void onIceCandidate(IceCandidate candidate) {
 
     }
 
