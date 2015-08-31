@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.jch.utillib.view.CircleImageView;
+import com.sohu.kurento.bean.RoomBean;
 import com.sohu.live56.R;
 import com.sohu.live56.bean.Room;
 import com.sohu.live56.view.util.FindItemView;
@@ -22,14 +23,14 @@ public class SquareAdapter extends BaseAdapter {
 
     private Context context;
 
-    private ArrayList<Room> rooms = new ArrayList<>();
+    private ArrayList<RoomBean> rooms = new ArrayList<>();
 
     public SquareAdapter(Context context) {
 
         this.context = context;
     }
 
-    public void notifyDataSetChanged(ArrayList<Room> tempRoom) {
+    public void notifyDataSetChanged(ArrayList<RoomBean> tempRoom) {
         rooms.clear();
         if (tempRoom != null)
             rooms.addAll(tempRoom);
@@ -78,10 +79,10 @@ public class SquareAdapter extends BaseAdapter {
             convertView.setPadding(0, 0, 0, 0);
         }
 
-        Room room = rooms.get(position);
+        RoomBean room = rooms.get(position);
 
         //TODO set item data.
-        viewHolder.titleTv.setText(room.getTitle());
+        viewHolder.titleTv.setText(room.getName());
 
         return convertView;
     }

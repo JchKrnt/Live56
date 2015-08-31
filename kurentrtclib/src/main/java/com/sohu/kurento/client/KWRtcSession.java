@@ -124,7 +124,7 @@ public class KWRtcSession implements KWSessionEvent {
         videoCapturer = null;
         localVideoTrack = null;
         remoteVideoTrack = null;
-        localRenderVideo = sessionParams.getUserType() == UserType.MASTER ? true : false;
+        localRenderVideo = sessionParams.getUserType() == UserType.PRESENTER ? true : false;
         remoteRenderVideo = !localRenderVideo;
         videoSourceStopped = false;
         this.remoteRender = remoteRender;
@@ -236,13 +236,13 @@ public class KWRtcSession implements KWSessionEvent {
         pcConstraints.optional.add(
                 new MediaConstraints.KeyValuePair(DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT, "true"));
         //create local Constraints
-        if (sessionParams.getUserType() == UserType.MASTER)
+        if (sessionParams.getUserType() == UserType.PRESENTER)
             createLocalMediaConstraintsInernal();
 
         // Create SDP constraints.
         sdpMediaConstraints = new MediaConstraints();
 
-        if (sessionParams.getUserType() == UserType.MASTER) {       //master.
+        if (sessionParams.getUserType() == UserType.PRESENTER) {       //master.
             sdpMediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
                     "OfferToReceiveVideo", "false"));
             sdpMediaConstraints.mandatory.add(new MediaConstraints.KeyValuePair(
@@ -350,7 +350,7 @@ public class KWRtcSession implements KWSessionEvent {
     private void createLocalMediaStream() {
         LogCat.debug(" create local media Stream.--------");
         mediaStream = factory.createLocalMediaStream("ARDAMS");
-        if (sessionParams.getUserType() == UserType.MASTER) {
+        if (sessionParams.getUserType() == UserType.PRESENTER) {
             if (sessionParams.isVideoCallEnable()) {
                 String cameraDeviceName = VideoCapturerAndroid.getDeviceName(0);
                 String frontCameraDeviceName =
@@ -514,21 +514,21 @@ public class KWRtcSession implements KWSessionEvent {
         public void onIceGatheringChange(PeerConnection.IceGatheringState newState) {
             LogCat.v(pcObserverLogMsg + "onIceGatheringChange IceGatheringState : " + newState.name());
 
-            if (PeerConnection.IceGatheringState.COMPLETE.equals(newState)) {
-                if (peerConnection != null)
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            evnent.onLocalSdp(peerConnection.getLocalDescription());
-                        }
-                    });
-            }
+//            if (PeerConnection.IceGatheringState.COMPLETE.equals(newState)) {
+//
+//            }
         }
 
         @Override
-        public void onIceCandidate(IceCandidate candidate) {
+        public void onIceCandidate(final IceCandidate candidate) {
             LogCat.v(pcObserverLogMsg + "onIceCandidate IceCandidate : " + candidate.sdp);
-
+            if (peerConnection != null)
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        evnent.onIceCandidate(candidate);
+                    }
+                });
         }
 
         @Override
@@ -545,13 +545,13 @@ public class KWRtcSession implements KWSessionEvent {
                         return;
                     }
 
-//                    if (stream.audioTracks.size() == 1 && sessionParams.getUserType() == UserType.MASTER) {
+//                    if (stream.audioTracks.size() == 1 && sessionParams.getUserType() == UserType.PRESENTER) {
 //                        AudioTrack audioTrack = stream.audioTracks.get(0);
 //                        audioTrack.setEnabled(false);
 //                    }
                     if (stream.videoTracks.size() == 1) {
                         remoteVideoTrack = stream.videoTracks.get(0);
-                        remoteVideoTrack.setEnabled(sessionParams.getUserType() == UserType.MASTER ? false : true);
+                        remoteVideoTrack.setEnabled(sessionParams.getUserType() == UserType.PRESENTER ? false : true);
                         remoteVideoTrack.addRenderer(new VideoRenderer(remoteRender));
                     }
 
@@ -652,11 +652,20 @@ public class KWRtcSession implements KWSessionEvent {
         @Override
         public void onSetSuccess() {
 
-            if (peerConnection.getLocalDescription() != null && peerConnection.getRemoteDescription() == null)
-                LogCat.debug("KW set local description successs !");
+            if (peerConnection.getLocalDescription() != null && peerConnection.getRemoteDescription() == null) {
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        LogCat.debug("KW set local description successs !");
+                        evnent.onLocalSdp(peerConnection.getLocalDescription());
+                    }
+                });
 
-            else if (peerConnection.getRemoteDescription() != null)
+
+            } else if (peerConnection.getRemoteDescription() != null) {
                 LogCat.debug("KW set remote description success !");
+
+            }
 
         }
 

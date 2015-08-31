@@ -3,6 +3,8 @@ package com.sohu.kurento.netClient;
 
 import com.sohu.kurento.bean.UserType;
 
+import org.webrtc.IceCandidate;
+
 /**
  * Created by jingbiaowang on 2015/7/22.
  */
@@ -23,7 +25,8 @@ public interface KWWebSocket {
     public void registerRoom(String name);
 
 
-    public void sendSdp(UserType userType, String sdp, String masterid);
+    public void sendSdp(UserType userType, String sdp, String roomName);
 
+    public void sendIceCandidate(IceCandidate candidate);
 
 }

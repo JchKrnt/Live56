@@ -1,5 +1,7 @@
 package com.sohu.kurento.netClient;
 
+import com.sohu.kurento.bean.RoomBean;
+
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
 
@@ -12,7 +14,9 @@ public interface KWEvent {
 
     //from server.
 
-    public void onRegisterRoom();
+    public void onRegisterRoomSuccess(RoomBean room);
+
+    public void onRegisterRoomFailure(String msg);
 
     public void onRemoteAnswer(String sdp);
 

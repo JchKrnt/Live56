@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import com.sohu.kurento.bean.RoomBean;
 import com.sohu.live56.util.LogCat;
 
 import java.util.Timer;
@@ -29,8 +30,6 @@ public class ObserverActivity extends PlayerActivity implements ObserverEvent {
         VideoWaitFrag frag = VideoWaitFrag.newInstance();
         ft.add(fContentId, frag);
         ft.commit();
-
-//        videoTimer();
 
     }
 

@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sohu.kurento.bean.RoomBean;
 import com.sohu.kurento.netClient.KWWebSocketClient;
 import com.sohu.kurento.util.LooperExecutor;
 import com.sohu.live56.R;
@@ -31,7 +32,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 广场 fragment .
- * <p/>
+ * <p>
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
@@ -117,7 +118,7 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
      *
      * @param rooms
      */
-    private void initData(ArrayList<Room> rooms) {
+    private void initData(ArrayList<RoomBean> rooms) {
         if (rooms != null && rooms.size() > 0) {
             hasData();
             squareAdapter.notifyDataSetChanged(rooms);
@@ -169,18 +170,10 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
     private class ListListener implements KWWebSocketClient.OnListListener {
 
         @Override
-        public void onListListener(final ArrayList<String> masters) {
+        public void onListListener(final ArrayList<RoomBean> rooms) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    ArrayList<Room> rooms = new ArrayList<Room>();
-                    for (String roomId : masters) {
-                        Room room = new Room();
-                        room.setId(roomId);
-                        room.setTitle("room " + roomId);
-                        rooms.add(room);
-                    }
 
                     initData(rooms);
                 }

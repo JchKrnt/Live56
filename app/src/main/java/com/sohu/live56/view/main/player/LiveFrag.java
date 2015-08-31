@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,6 +41,7 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
     private TextView livetimetv;
     private LiveButton livestatebtn;
     private RelativeLayout livebtmfl;
+    private EditText liveTitleEt;
     private static final String RELOAD_KEY = "reload";
     private boolean reload = false;
 
@@ -96,6 +98,7 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
         livetimetv = (TextView) view.findViewById(R.id.live_time_tv);
         livestatebtn = (LiveButton) view.findViewById(R.id.live_state_btn);
         livebtmfl = (RelativeLayout) view.findViewById(R.id.live_btm_fl);
+        liveTitleEt = (EditText) view.findViewById(R.id.live_title_et);
 
         if (reload)
             livebtmtitlell.setVisibility(View.GONE);
@@ -140,7 +143,7 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
 
     private void playtLive() {
 
-        liveEvent.onPrepareLive();
+        liveEvent.onPrepareLive(liveTitleEt.getText().toString());
     }
 
     private class MyJchSwitchListener implements JchSwitchButton.OnJchSwitchListener {

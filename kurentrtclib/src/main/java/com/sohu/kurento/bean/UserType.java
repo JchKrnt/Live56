@@ -5,7 +5,7 @@ package com.sohu.kurento.bean;
  */
 public enum UserType {
 
-    MASTER, VIEWER;
+    PRESENTER, VIEWER;
 
     public String getVauleStr() {
         return name().toLowerCase();

@@ -11,7 +11,7 @@ import com.sohu.live56.view.BaseFragment;
 
 /**
  * Created by jingbiaowang on 2015/8/13.
- * <p/>
+ * <p>
  * the common controller for palyer .Instance of stop , share.
  */
 public class BasePlayerFrag extends BaseFragment {

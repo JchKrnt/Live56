@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.sohu.kurento.bean.RoomBean;
 import com.sohu.kurento.bean.SettingsBean;
 import com.sohu.kurento.bean.UserType;
 import com.sohu.kurento.client.AppRTCAudioManager;
@@ -27,8 +28,6 @@ import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
-
-import java.nio.LongBuffer;
 
 /**
  * Created by jingbiaowang on 2015/8/13.
@@ -127,7 +126,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         if (this instanceof ObserverActivity)
             settingsBean.setUserType(UserType.VIEWER);
         else if (this instanceof LiveActivity)
-            settingsBean.setUserType(UserType.MASTER);
+            settingsBean.setUserType(UserType.PRESENTER);
         settingsBean.setVideoCallEnable(true);
         settingsBean.setVideoWidth(0);
         settingsBean.setVideoHeight(0);
@@ -198,7 +197,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     }
 
 
-    private void popMsgDialog(String msgStr) {
+    protected void popMsgDialog(String msgStr) {
         if (!activityRunning) {
             LogCat.debug("Critical error: " + msgStr);
             disconnect();
@@ -319,12 +318,16 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         });
     }
 
+
+    /**
+     * send sdp to server after live present is prepared.
+     */
     private void sendSdp() {
 
-        if (this instanceof ObserverActivity) {
+        if (this instanceof ObserverActivity) {  //viewer.
             webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, getIntent().getStringExtra(SquareFrag.MASTER_KEY));
             LogCat.debug("send sdp on observer");
-        } else {      //Live
+        } else {      //Live presenter.
             if (peerPrepare && viewPrepare) {
                 webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, getIntent().getStringExtra(SquareFrag.MASTER_KEY));
                 LogCat.debug("send sdp on Master");
@@ -334,18 +337,38 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     }
 
     @Override
-    public void onRegisterRoom() {
+    public void onRegisterRoomSuccess(RoomBean room) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((LiveEvent) PlayerActivity.this).onRegistSuccess();
+            }
+        });
+        sendSdp();
+    }
 
+    @Override
+    public void onRegisterRoomFailure(final String msg) {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((LiveEvent) PlayerActivity.this).onResiterFailure(msg);
+            }
+        });
+        kwRtcSession.close();
     }
 
     @Override
     public void onRemoteIceCandidate(IceCandidate candidate) {
 
+        kwRtcSession.addRemoteCandidate(candidate);
     }
 
     @Override
     public void onIceCandidate(IceCandidate candidate) {
 
+        webSocketClient.sendIceCandidate(candidate);
     }
 
     @Override
@@ -373,8 +396,14 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
     }
 
+    protected void registerRoom(String titleStr) {
+        webSocketClient.registerRoom(titleStr);
+    }
+
     /**
-     * Live activity.
+     * Live presenter activity.
+     * <p/>
+     * send sdp to server after live present view is prepared.
      */
     void onViewPrepared() {
         viewPrepare = true;

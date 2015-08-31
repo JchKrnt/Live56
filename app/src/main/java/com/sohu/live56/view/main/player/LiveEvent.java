@@ -9,9 +9,13 @@ import com.sohu.live56.view.BaseFragment;
 
 public interface LiveEvent extends BasePlayEvent {
 
-    public void onPrepareLive();
+    public void onPrepareLive(String roomName);
 
     public void puaseLive();
+
+    void onRegistSuccess();
+
+    void onResiterFailure(String msg);
 
 
 }

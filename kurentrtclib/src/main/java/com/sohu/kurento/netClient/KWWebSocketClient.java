@@ -5,9 +5,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.sohu.kurento.bean.RoomBean;
 import com.sohu.kurento.bean.UserType;
 import com.sohu.kurento.util.LogCat;
 import com.sohu.kurento.util.LooperExecutor;
+
+import org.webrtc.IceCandidate;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.Set;
 public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWebSocket {
 
     public interface OnListListener {
-        void onListListener(ArrayList<String> masters);
+        void onListListener(ArrayList<RoomBean> masters);
 
         void onConnectionOpened();
 
@@ -103,8 +106,12 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
             onResponse(jsonMsg);
         } else if (idStr != null && "stopCommunication".equals(idStr)) {
             event.onDisconnect();
-        } else if (idStr != null && "listResponse".equals(idStr)) {
+        } else if (idStr != null && "roomList".equals(idStr)) {
             onListResponse(jsonMsg);
+        } else if (idStr != null && "register".equals(idStr)) {
+            onRegister(jsonMsg);
+        } else if (idStr != null && "iceCandidate".equals(idStr)) {
+
         }
 
     }
@@ -120,12 +127,38 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
 
             LogCat.debug("master id : " + jsonMsg.get("masters").getAsString());
 
-            Type collectionType = new TypeToken<Set<String>>() {
+            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
             }.getType();
-            Set<String> masters = gson.fromJson(jsonMsg.get("masters").getAsString(), collectionType);
-            listListener.onListListener(new ArrayList<>(masters));
+            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsString(), collectionType);
+            listListener.onListListener(masters);
         } else {
             listListener.onError(jsonMsg.get("message").getAsString());
+        }
+    }
+
+    /**
+     * after register room from server.
+     */
+    private void onRegister(JsonObject jsonObject) {
+
+        String response = jsonObject.get("response").toString();
+        if (response != null && response.equals("accepted")) {
+            event.onRegisterRoomSuccess(gson.fromJson(jsonObject.get("room"), RoomBean.class));
+        } else {
+            event.onRegisterRoomFailure(jsonObject.get("message").toString());
+        }
+    }
+
+
+    private void onIceCandidate(JsonObject jsonObject) {
+
+        JsonObject iceJson = jsonObject.getAsJsonObject("candidate");
+        if (iceJson != null) {
+            IceCandidate candidate = new IceCandidate(
+                    iceJson.get("sdpMid").getAsString(),
+                    iceJson.get("sdpMLineIndex").getAsInt(),
+                    iceJson.get("candidate").getAsString());
+            event.onRemoteIceCandidate(candidate);
         }
     }
 
@@ -193,13 +226,26 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
     }
 
     @Override
-    public void registerRoom(String name) {
+    public void registerRoom(final String name) {
 
-//        executor.execute(new );
-
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("id", "register");
+                jsonObject.addProperty("roomName", name);
+                webSocketChannel.sendMsg(jsonObject.toString());
+                LogCat.debug("register room : " + name);
+            }
+        });
     }
 
-    public void sendSdp(final UserType userType, final String sdp, final String masterId) {
+    /**
+     * @param userType
+     * @param sdp
+     * @param roomName
+     */
+    public void sendSdp(final UserType userType, final String sdp, final String roomName) {
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -207,13 +253,36 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
                 jsonObject.addProperty("id", userType.getVauleStr());
                 jsonObject.addProperty("sdpOffer", sdp);
                 if (userType == UserType.VIEWER) {
-                    jsonObject.addProperty("masterKey", masterId);
+                    jsonObject.addProperty("roomName", roomName);
                 }
 
                 webSocketChannel.sendMsg(jsonObject.toString());
             }
         });
-
     }
 
+    public class MyIceCondidate {
+        private String candidate;
+        private String sdpMid;
+        private int sdpMLineIndex;
+
+        public MyIceCondidate(String candidate, String sdpMid, int sdpMLineIndex) {
+            this.candidate = candidate;
+            this.sdpMid = sdpMid;
+            this.sdpMLineIndex = sdpMLineIndex;
+        }
+    }
+
+    @Override
+    public void sendIceCandidate(final IceCandidate candidate) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("id", "onIceCandidate");
+                jsonObject.addProperty("candidate", gson.toJson(new MyIceCondidate(candidate.sdp, candidate.sdpMid, candidate.sdpMLineIndex)));
+                webSocketChannel.sendMsg(jsonObject.toString());
+            }
+        });
+    }
 }
