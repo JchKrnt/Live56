@@ -17,27 +17,29 @@
 
     <ListView
         android:id="@+id/square_lv"
-        style="@style/style_live_lv"></ListView>
+        style="@style/style_live_lv"
+        android:visibility="gone"></ListView>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/square_nodate_fl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/square_nodate"
-            android:textColor="@color/gray_font"
-            android:textSize="12dp" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/wifi_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:src="@drawable/nodata" />
-    </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/square_nodate"
+            android:textColor="@color/gray_font"
+            android:textSize="12dp" />
+    </LinearLayout>
 
 </LinearLayout>

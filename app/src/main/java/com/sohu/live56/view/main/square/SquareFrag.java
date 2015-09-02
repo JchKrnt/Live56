@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 /**
  * 广场 fragment .
- * <p>
+ * <p/>
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
@@ -42,7 +43,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class SquareFrag extends Fragment implements AdapterView.OnItemClickListener {
     private TextView titletv;
     private ListView squarelv;
-    private FrameLayout squarenodatefl;
+    private LinearLayout squarenodatefl;
     private SquareAdapter squareAdapter;
     private KWWebSocketClient socketClient = null;
     private boolean webSocketOk = false;
@@ -104,7 +105,7 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         squarelv = (ListView) view.findViewById(R.id.square_lv);
         squarelv.setSelector(new BitmapDrawable());
         squarelv.setOnItemClickListener(this);
-        squarenodatefl = (FrameLayout) view.findViewById(R.id.square_nodate_fl);
+        squarenodatefl = (LinearLayout) view.findViewById(R.id.square_nodate_fl);
         progressImg = (GifImageView) view.findViewById(R.id.wifi_progress);
 
         squareAdapter = new SquareAdapter(getActivity().getApplicationContext());
@@ -142,17 +143,16 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
     }
 
     private void noData() {
-
+        squarelv.setVisibility(View.GONE);
         squarenodatefl.setVisibility(View.VISIBLE);
-        progressImg.setVisibility(View.GONE);
     }
 
     private void progressWifi() {
         squarenodatefl.setVisibility(View.VISIBLE);
-        progressImg.setVisibility(View.VISIBLE);
     }
 
     private void hasData() {
+        squarelv.setVisibility(View.VISIBLE);
         squarenodatefl.setVisibility(View.GONE);
     }
 

@@ -47,6 +47,13 @@
     <option name="Skip Tests" value="false" />
     <pom-list />
   </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/../../../webRtc/web_meet/Kurento/kurento6.0/kurento-tutorial-java/kurento-one2many-call/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
     <option name="myDefaultNotNull" value="android.support.annotation.NonNull" />

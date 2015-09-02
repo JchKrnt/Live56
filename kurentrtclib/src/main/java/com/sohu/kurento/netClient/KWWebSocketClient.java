@@ -125,11 +125,9 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
         String reponseFlag = jsonMsg.get("response").getAsString();
         if (reponseFlag != null && reponseFlag.equals("accepted")) {
 
-            LogCat.debug("master id : " + jsonMsg.get("masters").getAsString());
-
             Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
             }.getType();
-            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsString(), collectionType);
+            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
             listListener.onListListener(masters);
         } else {
             listListener.onError(jsonMsg.get("message").getAsString());
@@ -208,7 +206,7 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
             @Override
             public void run() {
                 JsonObject listRequest = new JsonObject();
-                listRequest.addProperty("id", "list");
+                listRequest.addProperty("id", "roomList");
                 webSocketChannel.sendMsg(listRequest.toString());
             }
         });
