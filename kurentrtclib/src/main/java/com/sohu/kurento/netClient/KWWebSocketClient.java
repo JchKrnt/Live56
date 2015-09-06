@@ -14,11 +14,10 @@ import org.webrtc.IceCandidate;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Created by jingbiaowang on 2015/7/22.
- * <p/>
+ * <p>
  * 网络访问。
  */
 public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWebSocket {
@@ -225,7 +224,6 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
 
     @Override
     public void registerRoom(final String name) {
-
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -278,9 +276,10 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
             public void run() {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("id", "onIceCandidate");
-                jsonObject.addProperty("candidate", gson.toJson(new MyIceCondidate(candidate.sdp, candidate.sdpMid, candidate.sdpMLineIndex)));
+                jsonObject.add("candidate", gson.toJsonTree(new MyIceCondidate(candidate.sdp, candidate.sdpMid, candidate.sdpMLineIndex)));
                 webSocketChannel.sendMsg(jsonObject.toString());
             }
         });
     }
+
 }

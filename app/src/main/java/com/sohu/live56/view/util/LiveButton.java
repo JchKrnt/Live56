@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageButton;
 
 import com.sohu.live56.R;
@@ -46,6 +47,11 @@ public class LiveButton extends ImageButton {
 
         a.recycle();
         init();
+    }
+
+    @Override
+    public final void setOnClickListener(OnClickListener l) {
+        super.setOnClickListener(l);
     }
 
     private void init() {

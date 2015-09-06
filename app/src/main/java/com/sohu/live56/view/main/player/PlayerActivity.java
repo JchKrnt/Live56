@@ -397,6 +397,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     }
 
     protected void registerRoom(String titleStr) {
+        LogCat.debug("----------registerRoom from service.");
         webSocketClient.registerRoom(titleStr);
     }
 
@@ -405,7 +406,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
      * <p/>
      * send sdp to server after live present view is prepared.
      */
-    void onViewPrepared() {
+    protected void onViewPrepared() {
         viewPrepare = true;
         sendSdp();
     }

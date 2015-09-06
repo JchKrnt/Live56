@@ -16,6 +16,6 @@
     <FrameLayout
         android:id="@+id/player_frag_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

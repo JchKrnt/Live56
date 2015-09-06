@@ -11,7 +11,7 @@ import de.tavendo.autobahn.WebSocketException;
 
 /**
  * Created by jingbiaowang on 2015/7/21.
- * <p>
+ * <p/>
  * Websocket channel.
  */
 public class WebSocketChannel {
