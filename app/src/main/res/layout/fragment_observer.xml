@@ -2,7 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/style_video_frag_content"
-    android:background="@color/orange"
     tools:context="com.sohu.live56.view.main.player.ObserverFrag">
 
     <LinearLayout

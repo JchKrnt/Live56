@@ -3,19 +3,19 @@ package com.sohu.live56.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.sohu.kurento.bean.RoomBean;
+
 /**
  * Created by jingbiaowang on 2015/8/13.
  */
-public class Room implements Parcelable {
+public class Room extends RoomBean implements Parcelable {
     /**
      * 视频房间播放状态。
      */
-    enum State {
+    public enum State {
         LIVING, OVER;
     }
 
-    private String id;
-    private String title;
     private State state;
 
 
@@ -26,8 +26,6 @@ public class Room implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
-        dest.writeString(this.title);
         dest.writeString(this.state.name());
     }
 
@@ -35,8 +33,6 @@ public class Room implements Parcelable {
     }
 
     protected Room(Parcel in) {
-        this.id = in.readString();
-        this.title = in.readString();
         this.state = State.valueOf(in.readString());
     }
 
@@ -50,21 +46,6 @@ public class Room implements Parcelable {
         }
     };
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public State getState() {
         return state;

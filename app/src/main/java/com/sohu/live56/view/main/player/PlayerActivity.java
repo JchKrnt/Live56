@@ -31,7 +31,7 @@ import org.webrtc.VideoRendererGui;
 
 /**
  * Created by jingbiaowang on 2015/8/13.
- * <p/>
+ * <p>
  * in charge of video player.
  */
 public abstract class PlayerActivity extends BaseActivity implements KWEvent {
@@ -58,6 +58,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     //only use at master case.Sending sdp dependent on whether master view prepared and peer prepared.
     private boolean peerPrepare = false;
     private boolean viewPrepare = false;
+
+    private RoomBean room;
 
     @Override
     protected View onCreateView() {
@@ -159,7 +161,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
     private void onConnectedToRoomInternal() {
         kwRtcSession.createPeerConnection();
-        kwRtcSession.createOffer();
+        if (this instanceof ObserverActivity)
+            kwRtcSession.createOffer();
     }
 
     protected abstract void onAddFragment(int contentViewId);
@@ -325,13 +328,14 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     private void sendSdp() {
 
         if (this instanceof ObserverActivity) {  //viewer.
-            webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, getIntent().getStringExtra(SquareFrag.MASTER_KEY));
+            String roomName = getIntent().getStringExtra(SquareFrag.MASTER_KEY);
+            room = new RoomBean();
+            room.setName(roomName);
+            webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, roomName);
             LogCat.debug("send sdp on observer");
         } else {      //Live presenter.
-            if (peerPrepare && viewPrepare) {
-                webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, getIntent().getStringExtra(SquareFrag.MASTER_KEY));
-                LogCat.debug("send sdp on Master");
-            }
+            webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, room.getName());
+            LogCat.debug("send sdp on Master");
         }
 
     }
@@ -344,7 +348,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
                 ((LiveEvent) PlayerActivity.this).onRegistSuccess();
             }
         });
-        sendSdp();
+        this.room = room;
+        kwRtcSession.createOffer();
     }
 
     @Override
@@ -368,7 +373,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     @Override
     public void onIceCandidate(IceCandidate candidate) {
 
-        webSocketClient.sendIceCandidate(candidate);
+        webSocketClient.sendIceCandidate(candidate, null);
     }
 
     @Override
@@ -403,11 +408,10 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
     /**
      * Live presenter activity.
-     * <p/>
+     * <p>
      * send sdp to server after live present view is prepared.
      */
     protected void onViewPrepared() {
         viewPrepare = true;
-        sendSdp();
     }
 }

@@ -514,9 +514,6 @@ public class KWRtcSession implements KWSessionEvent {
         public void onIceGatheringChange(PeerConnection.IceGatheringState newState) {
             LogCat.v(pcObserverLogMsg + "onIceGatheringChange IceGatheringState : " + newState.name());
 
-//            if (PeerConnection.IceGatheringState.COMPLETE.equals(newState)) {
-//
-//            }
         }
 
         @Override
@@ -622,6 +619,8 @@ public class KWRtcSession implements KWSessionEvent {
     }
 
     private class KWSdpObserver implements SdpObserver {
+
+
         @Override
         public void onCreateSuccess(SessionDescription origSdp) {
             LogCat.debug("local sdp created----------");
@@ -660,18 +659,13 @@ public class KWRtcSession implements KWSessionEvent {
                         evnent.onLocalSdp(peerConnection.getLocalDescription());
                     }
                 });
-
-
             } else if (peerConnection.getRemoteDescription() != null) {
                 LogCat.debug("KW set remote description success !");
-
             }
-
         }
 
         @Override
         public void onCreateFailure(String error) {
-
             reportError("createSDP error: " + error);
         }
 
@@ -810,10 +804,13 @@ public class KWRtcSession implements KWSessionEvent {
 
     @Override
     public void addRemoteCandidate(final IceCandidate candidate) {
+
+        LogCat.debug("add remote candidate : " + candidate.toString());
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 peerConnection.addIceCandidate(candidate);
+
             }
         });
     }

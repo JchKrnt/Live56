@@ -143,7 +143,7 @@ public class LiveFrag extends BaseFragment implements View.OnClickListener {
 
     private void playtLive() {
 
-        liveEvent.onPrepareLive(liveTitleEt.getText().toString());
+        liveEvent.onPrepareLive(liveTitleEt.getText().toString().trim());
     }
 
     private class MyJchSwitchListener implements JchSwitchButton.OnJchSwitchListener {

@@ -23,14 +23,14 @@ public class SquareAdapter extends BaseAdapter {
 
     private Context context;
 
-    private ArrayList<RoomBean> rooms = new ArrayList<>();
+    private ArrayList<Room> rooms = new ArrayList<>();
 
     public SquareAdapter(Context context) {
 
         this.context = context;
     }
 
-    public void notifyDataSetChanged(ArrayList<RoomBean> tempRoom) {
+    public void notifyDataSetChanged(ArrayList<Room> tempRoom) {
         rooms.clear();
         if (tempRoom != null)
             rooms.addAll(tempRoom);
@@ -79,7 +79,7 @@ public class SquareAdapter extends BaseAdapter {
             convertView.setPadding(0, 0, 0, 0);
         }
 
-        RoomBean room = rooms.get(position);
+        Room room = rooms.get(position);
 
         //TODO set item data.
         viewHolder.titleTv.setText(room.getName());

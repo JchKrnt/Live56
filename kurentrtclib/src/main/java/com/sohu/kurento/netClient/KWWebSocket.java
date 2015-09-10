@@ -27,6 +27,6 @@ public interface KWWebSocket {
 
     public void sendSdp(UserType userType, String sdp, String roomName);
 
-    public void sendIceCandidate(IceCandidate candidate);
+    public void sendIceCandidate(IceCandidate candidate, String roomName);
 
 }

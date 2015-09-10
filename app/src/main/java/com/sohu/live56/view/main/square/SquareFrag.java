@@ -119,7 +119,7 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
      *
      * @param rooms
      */
-    private void initData(ArrayList<RoomBean> rooms) {
+    private void initData(ArrayList<Room> rooms) {
         if (rooms != null && rooms.size() > 0) {
             hasData();
             squareAdapter.notifyDataSetChanged(rooms);
@@ -162,9 +162,9 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
         Intent intent = new Intent(getActivity(), ObserverActivity.class);
         SquareAdapter adapter = (SquareAdapter) parent.getAdapter();
         Room room = (Room) adapter.getItem(position);
-        intent.putExtra(MASTER_KEY, String.valueOf(room.getId()));
-        LogCat.debug("start room Id : " + room.getId());
-        startActivity(intent);
+        intent.putExtra(MASTER_KEY, String.valueOf(room.getName()));
+        LogCat.debug("start room Id : " + room.getSessionId());
+        getActivity().startActivity(intent);
     }
 
     private class ListListener implements KWWebSocketClient.OnListListener {
@@ -174,8 +174,16 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    ArrayList<Room> viewRooms = new ArrayList<Room>();
+                    for (RoomBean roomBean : rooms) {
+                        Room room = new Room();
+                        room.setSessionId(roomBean.getSessionId());
+                        room.setName(roomBean.getName());
+                        room.setState(Room.State.LIVING);
+                        viewRooms.add(room);
+                    }
 
-                    initData(rooms);
+                    initData(viewRooms);
                 }
             });
         }
