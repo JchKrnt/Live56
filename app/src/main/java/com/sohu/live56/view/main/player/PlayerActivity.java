@@ -31,7 +31,7 @@ import org.webrtc.VideoRendererGui;
 
 /**
  * Created by jingbiaowang on 2015/8/13.
- * <p>
+ * <p/>
  * in charge of video player.
  */
 public abstract class PlayerActivity extends BaseActivity implements KWEvent {
@@ -285,7 +285,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                kwRtcSession.processAnwser(sdp);
+                kwRtcSession.setRemoteSdp(sdp);
             }
         });
     }
@@ -373,7 +373,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
     @Override
     public void onIceCandidate(IceCandidate candidate) {
 
-        webSocketClient.sendIceCandidate(candidate, null);
+        webSocketClient.sendIceCandidate(candidate, room.getName());
     }
 
     @Override
@@ -408,7 +408,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
     /**
      * Live presenter activity.
-     * <p>
+     * <p/>
      * send sdp to server after live present view is prepared.
      */
     protected void onViewPrepared() {

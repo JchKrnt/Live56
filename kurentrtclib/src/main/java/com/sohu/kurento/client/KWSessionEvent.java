@@ -11,7 +11,7 @@ public interface KWSessionEvent {
 
     public void addRemoteCandidate(IceCandidate candidate);
 
-    void processAnwser(String anwser);
+    void setRemoteSdp(String anwser);
 
 
     /**

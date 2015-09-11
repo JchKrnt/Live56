@@ -443,32 +443,32 @@ public class KWRtcSession implements KWSessionEvent {
 
 
     @Override
-    public void processAnwser(String anwser) {
+    public void setRemoteSdp(String remoteSdp) {
         if (peerConnection == null || isError) {
             return;
         }
 
         if (preferIsac) {
-            anwser = preferCodec(anwser, AUDIO_CODEC_ISAC, true);
+            remoteSdp = preferCodec(remoteSdp, AUDIO_CODEC_ISAC, true);
         }
         if (sessionParams.isVideoCallEnable() && preferH264) {
-            anwser = preferCodec(anwser, VIDEO_CODEC_H264, false);
+            remoteSdp = preferCodec(remoteSdp, VIDEO_CODEC_H264, false);
         }
         if (sessionParams.isVideoCallEnable() && sessionParams.getStartVidoBitrateValue() > 0) {
-            anwser = setStartBitrate(VIDEO_CODEC_VP8, true,
-                    anwser, sessionParams.getStartVidoBitrateValue());
-            anwser = setStartBitrate(VIDEO_CODEC_VP9, true,
-                    anwser, sessionParams.getStartVidoBitrateValue());
-            anwser = setStartBitrate(VIDEO_CODEC_H264, true,
-                    anwser, sessionParams.getStartVidoBitrateValue());
+            remoteSdp = setStartBitrate(VIDEO_CODEC_VP8, true,
+                    remoteSdp, sessionParams.getStartVidoBitrateValue());
+            remoteSdp = setStartBitrate(VIDEO_CODEC_VP9, true,
+                    remoteSdp, sessionParams.getStartVidoBitrateValue());
+            remoteSdp = setStartBitrate(VIDEO_CODEC_H264, true,
+                    remoteSdp, sessionParams.getStartVidoBitrateValue());
         }
         if (sessionParams.getAudioBitrateValue() > 0) {
-            anwser = setStartBitrate(AUDIO_CODEC_OPUS, false,
-                    anwser, sessionParams.getAudioBitrateValue());
+            remoteSdp = setStartBitrate(AUDIO_CODEC_OPUS, false,
+                    remoteSdp, sessionParams.getAudioBitrateValue());
         }
         LogCat.debug("Set remote SDP.");
         final SessionDescription sdpRemote = new SessionDescription(
-                SessionDescription.Type.ANSWER, anwser);
+                SessionDescription.Type.ANSWER, remoteSdp);
         executor.execute(new Runnable() {
             @Override
             public void run() {
