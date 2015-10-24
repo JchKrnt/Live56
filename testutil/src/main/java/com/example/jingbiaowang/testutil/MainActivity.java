@@ -1,19 +1,18 @@
 package com.example.jingbiaowang.testutil;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private Button addBtn;
-    private LinearLayout contentLl;
+    private FadListView contentLl;
+    private LinearLayout contentView;
 
     private int initCount = 0;
 
@@ -25,17 +24,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
     }
 
-
     private void init() {
         addBtn = (Button) findViewById(R.id.add_btn);
-        contentLl = (LinearLayout) findViewById(R.id.content_ll);
+        contentLl = (FadListView) findViewById(R.id.content_ll);
         addBtn.setOnClickListener(this);
+        contentView = (LinearLayout) findViewById(R.id.content_view);
 
     }
 
     @Override
     public void onClick(View v) {
-
 
         switch (v.getId()) {
 
@@ -48,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 contentLl.addView(textView);
                 initCount++;
                 break;
-
             }
         }
     }
+
 }
