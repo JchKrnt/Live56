@@ -25,6 +25,7 @@ import com.sohu.live56.view.main.square.SquareFrag;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.PeerConnectionFactory;
+import org.webrtc.RendererCommon;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoRenderer;
 import org.webrtc.VideoRendererGui;
@@ -47,7 +48,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
     private AppRTCAudioManager audioManager;
     private SettingsBean settingsBean;
-    private VideoRendererGui.ScalingType scalingType;
+    private RendererCommon.ScalingType scalingType;
     private VideoRenderer.Callbacks remoteRender;
     private VideoRenderer.Callbacks localRender;
     private KWWebSocketClient webSocketClient;
@@ -86,7 +87,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         webSocketClient = KWWebSocketClient.getInstance();
         webSocketClient.setEvent(this);
 
-        scalingType = VideoRendererGui.ScalingType.SCALE_ASPECT_FILL;
+        scalingType = RendererCommon.ScalingType.SCALE_ASPECT_FILL;
         VideoRendererGui.setView(glviewcall, new Runnable() {
             @Override
             public void run() {
@@ -133,7 +134,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         settingsBean.setVideoWidth(0);
         settingsBean.setVideoHeight(0);
         settingsBean.setFps(15);
-        settingsBean.setStartVidoBitrateValue(256);
+        settingsBean.setStartVideoBitrateValue(150);
         settingsBean.setVideoCode("VP8");
         settingsBean.setHwCodeEnable(true);
         settingsBean.setAudioBitrateValue(0);
@@ -150,7 +151,7 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
                 if (kwRtcSession == null) {
                     kwRtcSession = KWRtcSession.getInstance();
                     PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-                    options.networkIgnoreMask = PeerConnectionFactory.Options.ADAPTER_TYPE_UNKNOWN;
+                    options.networkIgnoreMask = PeerConnectionFactory.Options.ADAPTER_TYPE_WIFI;
                     kwRtcSession.setPeerConnectionFactoryOptions(options);
                     kwRtcSession.createPeerConnectionFactory(localRender, remoteRender, settingsBean, PlayerActivity.this, VideoRendererGui.getEGLContext(), PlayerActivity.this);
                 }
@@ -326,7 +327,6 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
      * send sdp to server after live present is prepared.
      */
     private void sendSdp() {
-
         if (this instanceof ObserverActivity) {  //viewer.
             String roomName = getIntent().getStringExtra(SquareFrag.MASTER_KEY);
             room = new RoomBean();
