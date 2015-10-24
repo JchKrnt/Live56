@@ -15,8 +15,8 @@ public class SettingsBean implements Parcelable {
     /**
      * 是否手动设置视频频率。
      */
-    private String startVidoBitrate;
-    private int startVidoBitrateValue;
+    private String startVideoBitrate;
+    private int startVideoBitrateValue;
     private String videoCode;
     /**
      * 视频引见加速。
@@ -34,13 +34,13 @@ public class SettingsBean implements Parcelable {
     private UserType userType;
 
 
-    public SettingsBean(boolean videoCallEnable, int videoWidth, int videoHeight, int fps, String startVidoBitrate, int startVidoBitrateValue, String videoCode, boolean hwCodeEnable, String audioBitrate, int audioBitrateValue, String audioCode, boolean cpuUsageDetection, String serverUrl, boolean displayHud, UserType userType) {
+    public SettingsBean(boolean videoCallEnable, int videoWidth, int videoHeight, int fps, String startVideoBitrate, int startVideoBitrateValue, String videoCode, boolean hwCodeEnable, String audioBitrate, int audioBitrateValue, String audioCode, boolean cpuUsageDetection, String serverUrl, boolean displayHud, UserType userType) {
         this.videoCallEnable = videoCallEnable;
         this.videoWidth = videoWidth;
         this.videoHeight = videoHeight;
         this.fps = fps;
-        this.startVidoBitrate = startVidoBitrate;
-        this.startVidoBitrateValue = startVidoBitrateValue;
+        this.startVideoBitrate = startVideoBitrate;
+        this.startVideoBitrateValue = startVideoBitrateValue;
         this.videoCode = videoCode;
         this.hwCodeEnable = hwCodeEnable;
         this.audioBitrate = audioBitrate;
@@ -84,20 +84,20 @@ public class SettingsBean implements Parcelable {
         this.fps = fps;
     }
 
-    public String getStartVidoBitrate() {
-        return startVidoBitrate;
+    public String getStartVideoBitrate() {
+        return startVideoBitrate;
     }
 
-    public void setStartVidoBitrate(String startVidoBitrate) {
-        this.startVidoBitrate = startVidoBitrate;
+    public void setStartVideoBitrate(String startVideoBitrate) {
+        this.startVideoBitrate = startVideoBitrate;
     }
 
-    public int getStartVidoBitrateValue() {
-        return startVidoBitrateValue;
+    public int getStartVideoBitrateValue() {
+        return startVideoBitrateValue;
     }
 
-    public void setStartVidoBitrateValue(int startVidoBitrateValue) {
-        this.startVidoBitrateValue = startVidoBitrateValue;
+    public void setStartVideoBitrateValue(int startVideoBitrateValue) {
+        this.startVideoBitrateValue = startVideoBitrateValue;
     }
 
     public String getVideoCode() {
@@ -183,8 +183,8 @@ public class SettingsBean implements Parcelable {
         dest.writeInt(this.videoWidth);
         dest.writeInt(this.videoHeight);
         dest.writeInt(this.fps);
-        dest.writeString(this.startVidoBitrate);
-        dest.writeInt(this.startVidoBitrateValue);
+        dest.writeString(this.startVideoBitrate);
+        dest.writeInt(this.startVideoBitrateValue);
         dest.writeString(this.videoCode);
         dest.writeByte(hwCodeEnable ? (byte) 1 : (byte) 0);
         dest.writeString(this.audioBitrate);
@@ -204,8 +204,8 @@ public class SettingsBean implements Parcelable {
         this.videoWidth = in.readInt();
         this.videoHeight = in.readInt();
         this.fps = in.readInt();
-        this.startVidoBitrate = in.readString();
-        this.startVidoBitrateValue = in.readInt();
+        this.startVideoBitrate = in.readString();
+        this.startVideoBitrateValue = in.readInt();
         this.videoCode = in.readString();
         this.hwCodeEnable = in.readByte() != 0;
         this.audioBitrate = in.readString();

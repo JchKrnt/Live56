@@ -32,7 +32,7 @@ package org.webrtc;
  * more {@code AudioTrack} objects.
  */
 public class AudioSource extends MediaSource {
-    public AudioSource(long nativeSource) {
-        super(nativeSource);
-    }
+  public AudioSource(long nativeSource) {
+    super(nativeSource);
+  }
 }
