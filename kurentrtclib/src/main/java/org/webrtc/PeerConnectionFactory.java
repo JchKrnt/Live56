@@ -42,7 +42,7 @@ public class PeerConnectionFactory {
     private final long nativeFactory;
 
     public static class Options {
-        // Keep in sync with webrtc/base/network.h!
+        // Keep in sync with org.org.webrtc/base/network.h!
         public static final int ADAPTER_TYPE_UNKNOWN = 0;
         public static final int ADAPTER_TYPE_ETHERNET = 1 << 0;
         public static final int ADAPTER_TYPE_WIFI = 1 << 1;
@@ -51,7 +51,6 @@ public class PeerConnectionFactory {
         public static final int ADAPTER_TYPE_LOOPBACK = 1 << 4;
 
         public int networkIgnoreMask;
-        public boolean disableEncryption;
     }
 
     // |context| is an android.content.Context object, but we keep it untyped here
@@ -64,7 +63,7 @@ public class PeerConnectionFactory {
     // decoding thread.
     public static native boolean initializeAndroidGlobals(
             Object context, boolean initializeAudio, boolean initializeVideo,
-            boolean videoHwAcceleration);
+            boolean vp8HwAcceleration, Object renderEGLContext);
 
     // Field trial initialization. Must be called before PeerConnectionFactory
     // is created.
@@ -131,13 +130,11 @@ public class PeerConnectionFactory {
         nativeSetOptions(nativeFactory, options);
     }
 
-    public void setVideoHwAccelerationOptions(Object renderEGLContext) {
-        nativeSetVideoHwAccelerationOptions(nativeFactory, renderEGLContext);
-    }
-
     public void dispose() {
         freeFactory(nativeFactory);
     }
+
+    public native void nativeSetOptions(long nativeFactory, Options options);
 
     private static native long nativeCreatePeerConnectionFactory();
 
@@ -163,11 +160,6 @@ public class PeerConnectionFactory {
 
     private static native long nativeCreateAudioTrack(
             long nativeFactory, String id, long nativeSource);
-
-    public native void nativeSetOptions(long nativeFactory, Options options);
-
-    private static native void nativeSetVideoHwAccelerationOptions(
-            long nativeFactory, Object renderEGLContext);
 
     private static native void freeFactory(long nativeFactory);
 }

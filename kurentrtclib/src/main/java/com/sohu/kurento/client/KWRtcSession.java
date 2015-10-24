@@ -2,7 +2,6 @@ package com.sohu.kurento.client;
 
 import android.content.Context;
 import android.opengl.EGLContext;
-import android.util.Log;
 
 import com.sohu.kurento.bean.SettingsBean;
 import com.sohu.kurento.bean.UserType;
@@ -11,7 +10,6 @@ import com.sohu.kurento.util.LogCat;
 import com.sohu.kurento.util.LooperExecutor;
 
 import org.webrtc.AudioTrack;
-import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.DataChannel;
 import org.webrtc.IceCandidate;
 import org.webrtc.Logging;
@@ -202,7 +200,7 @@ public class KWRtcSession implements KWSessionEvent {
         //init PeerConnection global.
         if (!PeerConnectionFactory.initializeAndroidGlobals(
                 context, true, true,
-                sessionParams.isHwCodeEnable())) {
+                sessionParams.isHwCodeEnable(), renderEGLContext)) {
             evnent.portError("Failed to initializeAndroidGlobals");
         }
         factory = new PeerConnectionFactory();
@@ -262,7 +260,7 @@ public class KWRtcSession implements KWSessionEvent {
     private void createLocalMediaConstraintsInernal() {
         // Check if there is a camera on device and disable video call if not.
         LogCat.debug("-------create local media constraint.");
-        numberOfCameras = CameraEnumerationAndroid.getDeviceCount();
+        numberOfCameras = VideoCapturerAndroid.getDeviceCount();
         if (numberOfCameras == 0) {
             LogCat.debug("No camera on device. Switch to audio only call.");
             sessionParams.setVideoCallEnable(false);
@@ -354,9 +352,9 @@ public class KWRtcSession implements KWSessionEvent {
         mediaStream = factory.createLocalMediaStream("ARDAMS");
         if (sessionParams.getUserType() == UserType.PRESENTER) {
             if (sessionParams.isVideoCallEnable()) {
-                String cameraDeviceName = CameraEnumerationAndroid.getDeviceName(0);
+                String cameraDeviceName = VideoCapturerAndroid.getDeviceName(0);
                 String frontCameraDeviceName =
-                        CameraEnumerationAndroid.getNameOfFrontFacingDevice();
+                        VideoCapturerAndroid.getNameOfFrontFacingDevice();
                 if (numberOfCameras > 1 && frontCameraDeviceName != null) {
                     cameraDeviceName = frontCameraDeviceName;
                 }
@@ -449,7 +447,7 @@ public class KWRtcSession implements KWSessionEvent {
         if (peerConnection == null || isError) {
             return;
         }
-        LogCat.v("remote SDP : before : " + remoteSdp);
+
         if (preferIsac) {
             remoteSdp = preferCodec(remoteSdp, AUDIO_CODEC_ISAC, true);
         }
@@ -469,7 +467,6 @@ public class KWRtcSession implements KWSessionEvent {
                     remoteSdp, sessionParams.getAudioBitrateValue());
         }
         LogCat.debug("Set remote SDP.");
-        LogCat.v("remote SDP : " + remoteSdp);
         final SessionDescription sdpRemote = new SessionDescription(
                 SessionDescription.Type.ANSWER, remoteSdp);
         executor.execute(new Runnable() {
@@ -511,11 +508,6 @@ public class KWRtcSession implements KWSessionEvent {
                     }
                 }
             });
-        }
-
-        @Override
-        public void onIceConnectionReceivingChange(boolean receiving) {
-            LogCat.v("IceConnectionReceiving changed to " + receiving);
         }
 
         @Override
@@ -691,74 +683,6 @@ public class KWRtcSession implements KWSessionEvent {
         }
     }
 
-
-    private static String setStartBitrate(String codec, boolean isVideoCodec,
-                                          String sdpDescription, int bitrateKbps) {
-        String[] lines = sdpDescription.split("\r\n");
-        int rtpmapLineIndex = -1;
-        boolean sdpFormatUpdated = false;
-        String codecRtpMap = null;
-        // Search for codec rtpmap in format
-        // a=rtpmap:<payload type> <encoding name>/<clock rate> [/<encoding parameters>]
-        String regex = "^a=rtpmap:(\\d+) " + codec + "(/\\d+)+[\r]?$";
-        Pattern codecPattern = Pattern.compile(regex);
-        for (int i = 0; i < lines.length; i++) {
-            Matcher codecMatcher = codecPattern.matcher(lines[i]);
-            if (codecMatcher.matches()) {
-                codecRtpMap = codecMatcher.group(1);
-                rtpmapLineIndex = i;
-                break;
-            }
-        }
-        if (codecRtpMap == null) {
-            LogCat.w("No rtpmap for " + codec + " codec");
-            return sdpDescription;
-        }
-        LogCat.w("Found " + codec + " rtpmap " + codecRtpMap
-                + " at " + lines[rtpmapLineIndex]);
-
-        // Check if a=fmtp string already exist in remote SDP for this codec and
-        // update it with new bitrate parameter.
-        regex = "^a=fmtp:" + codecRtpMap + " \\w+=\\d+.*[\r]?$";
-        codecPattern = Pattern.compile(regex);
-        for (int i = 0; i < lines.length; i++) {
-            Matcher codecMatcher = codecPattern.matcher(lines[i]);
-            if (codecMatcher.matches()) {
-                LogCat.w("Found " + codec + " " + lines[i]);
-                if (isVideoCodec) {
-                    lines[i] += "; " + VIDEO_CODEC_PARAM_START_BITRATE
-                            + "=" + bitrateKbps;
-                } else {
-                    lines[i] += "; " + AUDIO_CODEC_PARAM_BITRATE
-                            + "=" + (bitrateKbps * 1000);
-                }
-                LogCat.w("Update remote SDP line: " + lines[i]);
-                sdpFormatUpdated = true;
-                break;
-            }
-        }
-
-        StringBuilder newSdpDescription = new StringBuilder();
-        for (int i = 0; i < lines.length; i++) {
-            newSdpDescription.append(lines[i]).append("\r\n");
-            // Append new a=fmtp line if no such line exist for a codec.
-            if (!sdpFormatUpdated && i == rtpmapLineIndex) {
-                String bitrateSet;
-                if (isVideoCodec) {
-                    bitrateSet = "a=fmtp:" + codecRtpMap + " "
-                            + VIDEO_CODEC_PARAM_START_BITRATE + "=" + bitrateKbps;
-                } else {
-                    bitrateSet = "a=fmtp:" + codecRtpMap + " "
-                            + AUDIO_CODEC_PARAM_BITRATE + "=" + (bitrateKbps * 1000);
-                }
-                LogCat.w("Add remote SDP line: " + bitrateSet);
-                newSdpDescription.append(bitrateSet).append("\r\n");
-            }
-
-        }
-        return newSdpDescription.toString();
-    }
-
     private static String preferCodec(
             String sdpDescription, String codec, boolean isAudio) {
         String[] lines = sdpDescription.split("\r\n");
@@ -784,14 +708,14 @@ public class KWRtcSession implements KWSessionEvent {
             }
         }
         if (mLineIndex == -1) {
-            LogCat.w("No " + mediaDescription + " line, so can't prefer " + codec);
+            LogCat.debug("No " + mediaDescription + " line, so can't prefer " + codec);
             return sdpDescription;
         }
         if (codecRtpMap == null) {
-            LogCat.w("No rtpmap for " + codec);
+            LogCat.debug("No rtpmap for " + codec);
             return sdpDescription;
         }
-        LogCat.w("Found " + codec + " rtpmap " + codecRtpMap + ", prefer at "
+        LogCat.debug("Found " + codec + " rtpmap " + codecRtpMap + ", prefer at "
                 + lines[mLineIndex]);
         String[] origMLineParts = lines[mLineIndex].split(" ");
         if (origMLineParts.length > 3) {
@@ -808,9 +732,9 @@ public class KWRtcSession implements KWSessionEvent {
                 }
             }
             lines[mLineIndex] = newMLine.toString();
-            LogCat.w("Change media description: " + lines[mLineIndex]);
+            LogCat.debug("Change media description: " + lines[mLineIndex]);
         } else {
-            LogCat.e("Wrong SDP media description format: " + lines[mLineIndex]);
+            LogCat.debug("Wrong SDP media description format: " + lines[mLineIndex]);
         }
         StringBuilder newSdpDescription = new StringBuilder();
         for (String line : lines) {
@@ -819,6 +743,72 @@ public class KWRtcSession implements KWSessionEvent {
         return newSdpDescription.toString();
     }
 
+    private static String setStartBitrate(String codec, boolean isVideoCodec,
+                                          String sdpDescription, int bitrateKbps) {
+        String[] lines = sdpDescription.split("\r\n");
+        int rtpmapLineIndex = -1;
+        boolean sdpFormatUpdated = false;
+        String codecRtpMap = null;
+        // Search for codec rtpmap in format
+        // a=rtpmap:<payload type> <encoding name>/<clock rate> [/<encoding parameters>]
+        String regex = "^a=rtpmap:(\\d+) " + codec + "(/\\d+)+[\r]?$";
+        Pattern codecPattern = Pattern.compile(regex);
+        for (int i = 0; i < lines.length; i++) {
+            Matcher codecMatcher = codecPattern.matcher(lines[i]);
+            if (codecMatcher.matches()) {
+                codecRtpMap = codecMatcher.group(1);
+                rtpmapLineIndex = i;
+                break;
+            }
+        }
+        if (codecRtpMap == null) {
+            LogCat.v("No rtpmap for " + codec + " codec");
+            return sdpDescription;
+        }
+        LogCat.debug("Found " + codec + " rtpmap " + codecRtpMap
+                + " at " + lines[rtpmapLineIndex]);
+
+        // Check if a=fmtp string already exist in remote SDP for this codec and
+        // update it with new bitrate parameter.
+        regex = "^a=fmtp:" + codecRtpMap + " \\w+=\\d+.*[\r]?$";
+        codecPattern = Pattern.compile(regex);
+        for (int i = 0; i < lines.length; i++) {
+            Matcher codecMatcher = codecPattern.matcher(lines[i]);
+            if (codecMatcher.matches()) {
+                LogCat.debug("Found " + codec + " " + lines[i]);
+                if (isVideoCodec) {
+                    lines[i] += "; " + VIDEO_CODEC_PARAM_START_BITRATE
+                            + "=" + bitrateKbps;
+                } else {
+                    lines[i] += "; " + AUDIO_CODEC_PARAM_BITRATE
+                            + "=" + (bitrateKbps * 1000);
+                }
+                LogCat.debug("Update remote SDP line: " + lines[i]);
+                sdpFormatUpdated = true;
+                break;
+            }
+        }
+
+        StringBuilder newSdpDescription = new StringBuilder();
+        for (int i = 0; i < lines.length; i++) {
+            newSdpDescription.append(lines[i]).append("\r\n");
+            // Append new a=fmtp line if no such line exist for a codec.
+            if (!sdpFormatUpdated && i == rtpmapLineIndex) {
+                String bitrateSet;
+                if (isVideoCodec) {
+                    bitrateSet = "a=fmtp:" + codecRtpMap + " "
+                            + VIDEO_CODEC_PARAM_START_BITRATE + "=" + bitrateKbps;
+                } else {
+                    bitrateSet = "a=fmtp:" + codecRtpMap + " "
+                            + AUDIO_CODEC_PARAM_BITRATE + "=" + (bitrateKbps * 1000);
+                }
+                LogCat.debug("Add remote SDP line: " + bitrateSet);
+                newSdpDescription.append(bitrateSet).append("\r\n");
+            }
+
+        }
+        return newSdpDescription.toString();
+    }
 
     @Override
     public void addRemoteCandidate(final IceCandidate candidate) {

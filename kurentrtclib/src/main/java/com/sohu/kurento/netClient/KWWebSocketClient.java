@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jingbiaowang on 2015/7/22.
- * <p>
+ * <p/>
  * 网络访问。
  */
 public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWebSocket {
@@ -110,13 +110,14 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
         LogCat.debug("receive msg : " + msg);
 
         JsonObject jsonMsg = gson.fromJson(msg, JsonObject.class);
+        SignalingResponseBean responseBean = gson.fromJson(msg, SignalingResponseBean.class);
         String idStr = jsonMsg.get("id").getAsString();
         if (idStr != null && ((idStr.equals("presenterResponse") || idStr.equals("viewerResponse")))) {
             onSdpResponse(jsonMsg);
         } else if (idStr != null && "stopCommunication".equals(idStr)) {
             event.onDisconnect();
         } else if (idStr != null && "roomList".equals(idStr)) {
-            onListResponse(jsonMsg);
+            onListResponse(responseBean);
         } else if (idStr != null && "register".equals(idStr)) {
             onRegister(jsonMsg);
         } else if (idStr != null && "iceCandidate".equals(idStr)) {
@@ -130,16 +131,18 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
      *
      * @param jsonMsg
      */
-    private void onListResponse(JsonObject jsonMsg) {
-        String reponseFlag = jsonMsg.get("response").getAsString();
-        if (reponseFlag != null && reponseFlag.equals("accepted")) {
+    private void onListResponse(SignalingResponseBean responseBean) {
+        String reponseFlag = responseBean.getResponse();
 
-            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
-            }.getType();
-            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
-            listListener.onListListener(masters);
+        if (reponseFlag != null && reponseFlag.equals("accepted") && responseBean.getRoomsList() != null) {
+
+//            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
+//            }.getType();
+//            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
+
+            listListener.onListListener(responseBean.getRoomsList());
         } else {
-            listListener.onError(jsonMsg.get("message").getAsString());
+            listListener.onError(responseBean.getMessage());
         }
     }
 
@@ -259,7 +262,7 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
 
     /**
      * Send sdp msg of presenter or viewer to server.
-     * <p>
+     * <p/>
      * Change sendSdpFlag to true and send iceCandidates stored before the sdp was send.
      *
      * @param userType

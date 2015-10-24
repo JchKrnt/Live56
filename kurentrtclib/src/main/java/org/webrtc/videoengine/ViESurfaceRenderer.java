@@ -12,20 +12,20 @@ package org.webrtc.videoengine;
 
 // The following four imports are needed saveBitmapToJPEG which
 // is for debug only
+
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.SurfaceHolder.Callback;
-
-import org.webrtc.Logging;
 
 public class ViESurfaceRenderer implements Callback {
 
@@ -46,24 +46,24 @@ public class ViESurfaceRenderer implements Callback {
 
     public ViESurfaceRenderer(SurfaceView view) {
         surfaceHolder = view.getHolder();
-        if(surfaceHolder == null)
+        if (surfaceHolder == null)
             return;
         surfaceHolder.addCallback(this);
     }
 
     // surfaceChanged and surfaceCreated share this function
     private void changeDestRect(int dstWidth, int dstHeight) {
-        dstRect.right = (int)(dstRect.left + dstRightScale * dstWidth);
-        dstRect.bottom = (int)(dstRect.top + dstBottomScale * dstHeight);
+        dstRect.right = (int) (dstRect.left + dstRightScale * dstWidth);
+        dstRect.bottom = (int) (dstRect.top + dstBottomScale * dstHeight);
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format,
-            int in_width, int in_height) {
-        Logging.d(TAG, "ViESurfaceRender::surfaceChanged");
+                               int in_width, int in_height) {
+        Log.d(TAG, "ViESurfaceRender::surfaceChanged");
 
         changeDestRect(in_width, in_height);
 
-        Logging.d(TAG, "ViESurfaceRender::surfaceChanged" +
+        Log.d(TAG, "ViESurfaceRender::surfaceChanged" +
                 " in_width:" + in_width + " in_height:" + in_height +
                 " srcRect.left:" + srcRect.left +
                 " srcRect.top:" + srcRect.top +
@@ -77,11 +77,11 @@ public class ViESurfaceRenderer implements Callback {
 
     public void surfaceCreated(SurfaceHolder holder) {
         Canvas canvas = surfaceHolder.lockCanvas();
-        if(canvas != null) {
+        if (canvas != null) {
             Rect dst = surfaceHolder.getSurfaceFrame();
-            if(dst != null) {
+            if (dst != null) {
                 changeDestRect(dst.right - dst.left, dst.bottom - dst.top);
-                Logging.d(TAG, "ViESurfaceRender::surfaceCreated" +
+                Log.d(TAG, "ViESurfaceRender::surfaceCreated" +
                         " dst.left:" + dst.left +
                         " dst.top:" + dst.top +
                         " dst.right:" + dst.right +
@@ -100,19 +100,18 @@ public class ViESurfaceRenderer implements Callback {
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Logging.d(TAG, "ViESurfaceRenderer::surfaceDestroyed");
+        Log.d(TAG, "ViESurfaceRenderer::surfaceDestroyed");
         bitmap = null;
         byteBuffer = null;
     }
 
     public Bitmap CreateBitmap(int width, int height) {
-        Logging.d(TAG, "CreateByteBitmap " + width + ":" + height);
+        Log.d(TAG, "CreateByteBitmap " + width + ":" + height);
         if (bitmap == null) {
             try {
                 android.os.Process.setThreadPriority(
-                    android.os.Process.THREAD_PRIORITY_DISPLAY);
-            }
-            catch (Exception e) {
+                        android.os.Process.THREAD_PRIORITY_DISPLAY);
+            } catch (Exception e) {
             }
         }
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
@@ -124,7 +123,7 @@ public class ViESurfaceRenderer implements Callback {
     }
 
     public ByteBuffer CreateByteBuffer(int width, int height) {
-        Logging.d(TAG, "CreateByteBuffer " + width + ":" + height);
+        Log.d(TAG, "CreateByteBuffer " + width + ":" + height);
         if (bitmap == null) {
             bitmap = CreateBitmap(width, height);
             byteBuffer = ByteBuffer.allocateDirect(width * height * 2);
@@ -133,8 +132,8 @@ public class ViESurfaceRenderer implements Callback {
     }
 
     public void SetCoordinates(float left, float top,
-            float right, float bottom) {
-        Logging.d(TAG, "SetCoordinates " + left + "," + top + ":" +
+                               float right, float bottom) {
+        Log.d(TAG, "SetCoordinates " + left + "," + top + ":" +
                 right + "," + bottom);
         dstLeftScale = left;
         dstTopScale = top;
@@ -147,21 +146,19 @@ public class ViESurfaceRenderer implements Callback {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteOutStream);
 
-        try{
+        try {
             FileOutputStream output = new FileOutputStream(String.format(
-                "/sdcard/render_%d.jpg", System.currentTimeMillis()));
+                    "/sdcard/render_%d.jpg", System.currentTimeMillis()));
             output.write(byteOutStream.toByteArray());
             output.flush();
             output.close();
-        }
-        catch (FileNotFoundException e) {
-        }
-        catch (IOException e) {
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
         }
     }
 
     public void DrawByteBuffer() {
-        if(byteBuffer == null)
+        if (byteBuffer == null)
             return;
         byteBuffer.rewind();
         bitmap.copyPixelsFromBuffer(byteBuffer);
@@ -169,11 +166,11 @@ public class ViESurfaceRenderer implements Callback {
     }
 
     public void DrawBitmap() {
-        if(bitmap == null)
+        if (bitmap == null)
             return;
 
         Canvas canvas = surfaceHolder.lockCanvas();
-        if(canvas != null) {
+        if (canvas != null) {
             // The follow line is for debug only
             // saveBitmapToJPEG(srcRect.right - srcRect.left,
             //                  srcRect.bottom - srcRect.top);
