@@ -26,5 +26,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
     }
 
+
+
     protected abstract View onCreateView();
 }
