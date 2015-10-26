@@ -174,6 +174,8 @@ public class SquareFrag extends Fragment implements AdapterView.OnItemClickListe
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    if (rooms == null)
+                        return;
                     ArrayList<Room> viewRooms = new ArrayList<Room>();
                     for (RoomBean roomBean : rooms) {
                         Room room = new Room();

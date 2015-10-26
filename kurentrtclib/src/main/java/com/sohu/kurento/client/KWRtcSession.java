@@ -63,10 +63,10 @@ public class KWRtcSession implements KWSessionEvent {
     private static final String MAX_VIDEO_FPS_CONSTRAINT = "maxFrameRate";
     private static final String MIN_VIDEO_FPS_CONSTRAINT = "minFrameRate";
     private static final String DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT = "DtlsSrtpKeyAgreement";
-    private static final int HD_VIDEO_WIDTH = 240;
-    private static final int HD_VIDEO_HEIGHT = 400;
-    private static final int MAX_VIDEO_WIDTH = 240;
-    private static final int MAX_VIDEO_HEIGHT = 400;
+    private static final int HD_VIDEO_WIDTH = 480;
+    private static final int HD_VIDEO_HEIGHT = 640;
+    private static final int MAX_VIDEO_WIDTH = 480;
+    private static final int MAX_VIDEO_HEIGHT = 640;
     private static final int MAX_VIDEO_FPS = 15;
     //保持現成同步。
     private boolean isError;

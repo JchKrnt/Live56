@@ -132,11 +132,13 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
      */
     private void onListResponse(JsonObject jsonMsg) {
         String reponseFlag = jsonMsg.get("response").getAsString();
-        if (reponseFlag != null && reponseFlag.equals("accepted")) {
+        SignalingResponseBean responseBean = gson.fromJson(jsonMsg, SignalingResponseBean.class);
+        if (responseBean.getResponse() != null && responseBean.getResponse().equals("accepted")) {
 
-            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
-            }.getType();
-            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
+//            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
+//            }.getType();
+//            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
+            ArrayList<RoomBean> masters = responseBean.getRoomsList();
             listListener.onListListener(masters);
         } else {
             listListener.onError(jsonMsg.get("message").getAsString());
@@ -259,7 +261,7 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
 
     /**
      * Send sdp msg of presenter or viewer to server.
-     * <p>
+     * <p/>
      * Change sendSdpFlag to true and send iceCandidates stored before the sdp was send.
      *
      * @param userType

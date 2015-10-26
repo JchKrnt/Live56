@@ -134,8 +134,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
         settingsBean.setVideoWidth(0);
         settingsBean.setVideoHeight(0);
         settingsBean.setFps(15);
-        settingsBean.setStartVideoBitrateValue(150);
-        settingsBean.setVideoCode("VP8");
+        settingsBean.setStartVideoBitrateValue(200);
+        settingsBean.setVideoCode("H264");
         settingsBean.setHwCodeEnable(true);
         settingsBean.setAudioBitrateValue(0);
         settingsBean.setAudioCode("OPUS");
