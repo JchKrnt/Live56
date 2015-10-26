@@ -665,6 +665,7 @@ public class VideoRendererGui implements GLSurfaceView.Renderer {
 
         @Override
         public synchronized void renderFrame(I420Frame frame) {
+            Log.i("AVMsg", "renderFrame.01");
             setSize(frame.width, frame.height, frame.rotationDegree);
             long now = System.nanoTime();
             framesReceived++;
@@ -690,6 +691,7 @@ public class VideoRendererGui implements GLSurfaceView.Renderer {
                 }
             }
 
+            Log.i("AVMsg", "renderFrame.02");
             if (frameToRenderQueue.size() > 0) {
                 // Skip rendering of this frame if previous frame was not rendered yet.
                 framesDropped++;
@@ -711,6 +713,8 @@ public class VideoRendererGui implements GLSurfaceView.Renderer {
 
             // Request rendering.
             surface.requestRender();
+
+            Log.i("AVMsg", "renderFrame.03");
         }
 
         // TODO(guoweis): Remove this once chrome code base is updated.
