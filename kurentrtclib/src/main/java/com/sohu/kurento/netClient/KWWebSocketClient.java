@@ -110,14 +110,13 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
         LogCat.debug("receive msg : " + msg);
 
         JsonObject jsonMsg = gson.fromJson(msg, JsonObject.class);
-        SignalingResponseBean responseBean = gson.fromJson(msg, SignalingResponseBean.class);
         String idStr = jsonMsg.get("id").getAsString();
         if (idStr != null && ((idStr.equals("presenterResponse") || idStr.equals("viewerResponse")))) {
             onSdpResponse(jsonMsg);
         } else if (idStr != null && "stopCommunication".equals(idStr)) {
             event.onDisconnect();
         } else if (idStr != null && "roomList".equals(idStr)) {
-            onListResponse(responseBean);
+            onListResponse(jsonMsg);
         } else if (idStr != null && "register".equals(idStr)) {
             onRegister(jsonMsg);
         } else if (idStr != null && "iceCandidate".equals(idStr)) {
@@ -131,18 +130,18 @@ public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWe
      *
      * @param jsonMsg
      */
-    private void onListResponse(SignalingResponseBean responseBean) {
-        String reponseFlag = responseBean.getResponse();
-
-        if (reponseFlag != null && reponseFlag.equals("accepted") && responseBean.getRoomsList() != null) {
+    private void onListResponse(JsonObject jsonMsg) {
+        String reponseFlag = jsonMsg.get("response").getAsString();
+        SignalingResponseBean responseBean = gson.fromJson(jsonMsg, SignalingResponseBean.class);
+        if (responseBean.getResponse() != null && responseBean.getResponse().equals("accepted")) {
 
 //            Type collectionType = new TypeToken<ArrayList<RoomBean>>() {
 //            }.getType();
 //            ArrayList<RoomBean> masters = gson.fromJson(jsonMsg.get("roomsList").getAsJsonArray(), collectionType);
-
-            listListener.onListListener(responseBean.getRoomsList());
+            ArrayList<RoomBean> masters = responseBean.getRoomsList();
+            listListener.onListListener(masters);
         } else {
-            listListener.onError(responseBean.getMessage());
+            listListener.onError(jsonMsg.get("message").getAsString());
         }
     }
 

@@ -33,18 +33,17 @@ import android.media.MediaCodecInfo;
 import android.media.MediaCodecInfo.CodecCapabilities;
 import android.media.MediaCodecList;
 import android.media.MediaFormat;
-import android.opengl.EGL14;
-import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
-import android.opengl.EGLDisplay;
-import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.os.Build;
-import android.util.Log;
 import android.view.Surface;
 
+import org.webrtc.Logging;
+
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Arrays;
 
 // Java-side of peerconnection_jni.cc:MediaCodecVideoDecoder.
 // This class is an implementation detail of the Java PeerConnection API.
@@ -53,12 +52,12 @@ import java.nio.ByteBuffer;
 public class MediaCodecVideoDecoder {
     // This class is constructed, operated, and destroyed by its C++ incarnation,
     // so the class and its methods have non-public visibility.  The API this
-    // class exposes aims to mimic the org.org.webrtc::VideoDecoder API as closely as
+    // class exposes aims to mimic the webrtc::VideoDecoder API as closely as
     // possibly to minimize the amount of translation work necessary.
 
     private static final String TAG = "MediaCodecVideoDecoder";
 
-    // Tracks org.org.webrtc::VideoCodecType.
+    // Tracks webrtc::VideoCodecType.
     public enum VideoCodecType {
         VIDEO_CODEC_VP8,
         VIDEO_CODEC_VP9,
@@ -77,39 +76,27 @@ public class MediaCodecVideoDecoder {
             {"OMX.qcom.", "OMX.Nvidia.", "OMX.Exynos.", "OMX.Intel."};
     // List of supported HW H.264 decoders.
     private static final String[] supportedH264HwCodecPrefixes =
-            {"OMX.qcom."};
-    // List of supported SW decoders.
-    private static final String[] supportedSwCodecPrefixes =
-            {"OMX.google."};
+            {"OMX.qcom.", "OMX.Intel."};
     // NV12 color format supported by QCOM codec, but not declared in MediaCodec -
     // see /hardware/qcom/media/mm-core/inc/OMX_QCOMExtns.h
     private static final int
             COLOR_QCOM_FORMATYUV420PackedSemiPlanar32m = 0x7FA30C04;
     // Allowable color formats supported by codec - in order of preference.
-    private static final int[] supportedColorList = {
+    private static final List<Integer> supportedColorList = Arrays.asList(
             CodecCapabilities.COLOR_FormatYUV420Planar,
             CodecCapabilities.COLOR_FormatYUV420SemiPlanar,
             CodecCapabilities.COLOR_QCOM_FormatYUV420SemiPlanar,
-            COLOR_QCOM_FORMATYUV420PackedSemiPlanar32m
-    };
+            COLOR_QCOM_FORMATYUV420PackedSemiPlanar32m);
     private int colorFormat;
     private int width;
     private int height;
     private int stride;
     private int sliceHeight;
     private boolean useSurface;
-    private int textureID = -1;
+    private int textureID = 0;
     private SurfaceTexture surfaceTexture = null;
     private Surface surface = null;
-    private float[] stMatrix = new float[16];
-    private EGLDisplay eglDisplay = EGL14.EGL_NO_DISPLAY;
-    private EGLContext eglContext = EGL14.EGL_NO_CONTEXT;
-    private EGLSurface eglSurface = EGL14.EGL_NO_SURFACE;
-    private static final int EGL14_SDK_VERSION =
-            Build.VERSION_CODES.JELLY_BEAN_MR1;
-    private static final int CURRENT_SDK_VERSION =
-            Build.VERSION.SDK_INT;
-
+    private EglBase eglBase;
 
     private MediaCodecVideoDecoder() {
     }
@@ -145,7 +132,7 @@ public class MediaCodecVideoDecoder {
             if (name == null) {
                 continue;  // No HW support in this codec; try the next one.
             }
-            Log.v(TAG, "Found candidate decoder " + name);
+            Logging.v(TAG, "Found candidate decoder " + name);
 
             // Check if this is supported decoder.
             boolean supportedCodec = false;
@@ -163,13 +150,13 @@ public class MediaCodecVideoDecoder {
             CodecCapabilities capabilities =
                     info.getCapabilitiesForType(mime);
             for (int colorFormat : capabilities.colorFormats) {
-                Log.v(TAG, "   Color: 0x" + Integer.toHexString(colorFormat));
+                Logging.v(TAG, "   Color: 0x" + Integer.toHexString(colorFormat));
             }
             for (int supportedColorFormat : supportedColorList) {
                 for (int codecColorFormat : capabilities.colorFormats) {
                     if (codecColorFormat == supportedColorFormat) {
                         // Found supported HW decoder.
-                        Log.d(TAG, "Found target decoder " + name +
+                        Logging.d(TAG, "Found target decoder " + name +
                                 ". Color: 0x" + Integer.toHexString(codecColorFormat));
                         return new DecoderProperties(name, codecColorFormat);
                     }
@@ -177,11 +164,6 @@ public class MediaCodecVideoDecoder {
             }
         }
         return null;  // No HW decoder.
-    }
-
-    private static boolean isEGL14Supported() {
-        Log.d(TAG, "SDK version: " + CURRENT_SDK_VERSION);
-        return (CURRENT_SDK_VERSION >= EGL14_SDK_VERSION);
     }
 
     public static boolean isVp8HwSupported() {
@@ -192,117 +174,20 @@ public class MediaCodecVideoDecoder {
         return findDecoder(H264_MIME_TYPE, supportedH264HwCodecPrefixes) != null;
     }
 
-    private void checkOnMediaCodecThread() {
+    private void checkOnMediaCodecThread() throws IllegalStateException {
         if (mediaCodecThread.getId() != Thread.currentThread().getId()) {
-            throw new RuntimeException(
+            throw new IllegalStateException(
                     "MediaCodecVideoDecoder previously operated on " + mediaCodecThread +
                             " but is now called on " + Thread.currentThread());
         }
     }
 
-    private void checkEglError(String msg) {
-        int error;
-        if ((error = EGL14.eglGetError()) != EGL14.EGL_SUCCESS) {
-            Log.e(TAG, msg + ": EGL Error: 0x" + Integer.toHexString(error));
-            throw new RuntimeException(
-                    msg + ": EGL error: 0x" + Integer.toHexString(error));
-        }
-    }
-
-    private void checkGlError(String msg) {
-        int error;
-        if ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
-            Log.e(TAG, msg + ": GL Error: 0x" + Integer.toHexString(error));
-            throw new RuntimeException(
-                    msg + ": GL Error: 0x " + Integer.toHexString(error));
-        }
-    }
-
-    private void eglSetup(EGLContext sharedContext, int width, int height) {
-        Log.d(TAG, "EGL setup");
-        if (sharedContext == null) {
-            sharedContext = EGL14.EGL_NO_CONTEXT;
-        }
-        eglDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
-        if (eglDisplay == EGL14.EGL_NO_DISPLAY) {
-            throw new RuntimeException("Unable to get EGL14 display");
-        }
-        int[] version = new int[2];
-        if (!EGL14.eglInitialize(eglDisplay, version, 0, version, 1)) {
-            throw new RuntimeException("Unable to initialize EGL14");
-        }
-
-        // Configure EGL for pbuffer and OpenGL ES 2.0.
-        int[] attribList = {
-                EGL14.EGL_RED_SIZE, 8,
-                EGL14.EGL_GREEN_SIZE, 8,
-                EGL14.EGL_BLUE_SIZE, 8,
-                EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
-                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT,
-                EGL14.EGL_NONE
-        };
-        EGLConfig[] configs = new EGLConfig[1];
-        int[] numConfigs = new int[1];
-        if (!EGL14.eglChooseConfig(eglDisplay, attribList, 0, configs, 0,
-                configs.length, numConfigs, 0)) {
-            throw new RuntimeException("Unable to find RGB888 EGL config");
-        }
-
-        // Configure context for OpenGL ES 2.0.
-        int[] attrib_list = {
-                EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
-                EGL14.EGL_NONE
-        };
-        eglContext = EGL14.eglCreateContext(eglDisplay, configs[0], sharedContext,
-                attrib_list, 0);
-        checkEglError("eglCreateContext");
-        if (eglContext == null) {
-            throw new RuntimeException("Null EGL context");
-        }
-
-        // Create a pbuffer surface.
-        int[] surfaceAttribs = {
-                EGL14.EGL_WIDTH, width,
-                EGL14.EGL_HEIGHT, height,
-                EGL14.EGL_NONE
-        };
-        eglSurface = EGL14.eglCreatePbufferSurface(eglDisplay, configs[0],
-                surfaceAttribs, 0);
-        checkEglError("eglCreatePbufferSurface");
-        if (eglSurface == null) {
-            throw new RuntimeException("EGL surface was null");
-        }
-    }
-
-    private void eglRelease() {
-        Log.d(TAG, "EGL release");
-        if (eglDisplay != EGL14.EGL_NO_DISPLAY) {
-            EGL14.eglDestroySurface(eglDisplay, eglSurface);
-            EGL14.eglDestroyContext(eglDisplay, eglContext);
-            EGL14.eglReleaseThread();
-            EGL14.eglTerminate(eglDisplay);
-        }
-        eglDisplay = EGL14.EGL_NO_DISPLAY;
-        eglContext = EGL14.EGL_NO_CONTEXT;
-        eglSurface = EGL14.EGL_NO_SURFACE;
-    }
-
-
-    private void makeCurrent() {
-        if (!EGL14.eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext)) {
-            throw new RuntimeException("eglMakeCurrent failed");
-        }
-    }
-
-    private boolean initDecode(
-            VideoCodecType type, int width, int height, boolean useSwCodec,
-            boolean useSurface, EGLContext sharedContext) {
+    // Pass null in |sharedContext| to configure the codec for ByteBuffer output.
+    private boolean initDecode(VideoCodecType type, int width, int height, EGLContext sharedContext) {
         if (mediaCodecThread != null) {
             throw new RuntimeException("Forgot to release()?");
         }
-        if (useSurface && sharedContext == null) {
-            throw new RuntimeException("No shared EGL context.");
-        }
+        useSurface = (sharedContext != null);
         String mime = null;
         String[] supportedCodecPrefixes = null;
         if (type == VideoCodecType.VIDEO_CODEC_VP8) {
@@ -314,101 +199,79 @@ public class MediaCodecVideoDecoder {
         } else {
             throw new RuntimeException("Non supported codec " + type);
         }
-        if (useSwCodec) {
-            supportedCodecPrefixes = supportedSwCodecPrefixes;
-        }
         DecoderProperties properties = findDecoder(mime, supportedCodecPrefixes);
         if (properties == null) {
             throw new RuntimeException("Cannot find HW decoder for " + type);
         }
-        Log.d(TAG, "Java initDecode: " + type + " : " + width + " x " + height +
+        Logging.d(TAG, "Java initDecode: " + type + " : " + width + " x " + height +
                 ". Color: 0x" + Integer.toHexString(properties.colorFormat) +
-                ". Use Surface: " + useSurface + ". Use SW codec: " + useSwCodec);
+                ". Use Surface: " + useSurface);
         if (sharedContext != null) {
-            Log.d(TAG, "Decoder shared EGL Context: " + sharedContext);
+            Logging.d(TAG, "Decoder shared EGL Context: " + sharedContext);
         }
         mediaCodecThread = Thread.currentThread();
         try {
-            Surface decodeSurface = null;
             this.width = width;
             this.height = height;
-            this.useSurface = useSurface;
             stride = width;
             sliceHeight = height;
 
             if (useSurface) {
                 // Create shared EGL context.
-                eglSetup(sharedContext, width, height);
-                makeCurrent();
+                eglBase = new EglBase(sharedContext, EglBase.ConfigType.PIXEL_BUFFER);
+                eglBase.createDummyPbufferSurface();
+                eglBase.makeCurrent();
 
                 // Create output surface
-                int[] textures = new int[1];
-                GLES20.glGenTextures(1, textures, 0);
-                checkGlError("glGenTextures");
-                textureID = textures[0];
-                GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureID);
-                checkGlError("glBindTexture mTextureID");
-
-                GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                        GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-                GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                        GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-                GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                        GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-                GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,
-                        GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
-                checkGlError("glTexParameter");
-                Log.d(TAG, "Video decoder TextureID = " + textureID);
+                textureID = GlUtil.generateTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
+                Logging.d(TAG, "Video decoder TextureID = " + textureID);
                 surfaceTexture = new SurfaceTexture(textureID);
                 surface = new Surface(surfaceTexture);
-                decodeSurface = surface;
             }
 
             MediaFormat format = MediaFormat.createVideoFormat(mime, width, height);
             if (!useSurface) {
                 format.setInteger(MediaFormat.KEY_COLOR_FORMAT, properties.colorFormat);
             }
-            Log.d(TAG, "  Format: " + format);
+            Logging.d(TAG, "  Format: " + format);
             mediaCodec =
                     MediaCodecVideoEncoder.createByCodecName(properties.codecName);
             if (mediaCodec == null) {
                 return false;
             }
-            mediaCodec.configure(format, decodeSurface, null, 0);
+            mediaCodec.configure(format, surface, null, 0);
             mediaCodec.start();
             colorFormat = properties.colorFormat;
             outputBuffers = mediaCodec.getOutputBuffers();
             inputBuffers = mediaCodec.getInputBuffers();
-            Log.d(TAG, "Input buffers: " + inputBuffers.length +
+            Logging.d(TAG, "Input buffers: " + inputBuffers.length +
                     ". Output buffers: " + outputBuffers.length);
             return true;
         } catch (IllegalStateException e) {
-            Log.e(TAG, "initDecode failed", e);
+            Logging.e(TAG, "initDecode failed", e);
             return false;
         }
     }
 
     private void release() {
-        Log.d(TAG, "Java releaseDecoder");
+        Logging.d(TAG, "Java releaseDecoder");
         checkOnMediaCodecThread();
         try {
             mediaCodec.stop();
             mediaCodec.release();
         } catch (IllegalStateException e) {
-            Log.e(TAG, "release failed", e);
+            Logging.e(TAG, "release failed", e);
         }
         mediaCodec = null;
         mediaCodecThread = null;
         if (useSurface) {
             surface.release();
-            if (textureID >= 0) {
-                int[] textures = new int[1];
-                textures[0] = textureID;
-                Log.d(TAG, "Delete video decoder TextureID " + textureID);
-                GLES20.glDeleteTextures(1, textures, 0);
-                checkGlError("glDeleteTextures");
-            }
-            eglRelease();
+            surface = null;
+            Logging.d(TAG, "Delete video decoder TextureID " + textureID);
+            GLES20.glDeleteTextures(1, new int[]{textureID}, 0);
+            textureID = 0;
+            eglBase.release();
+            eglBase = null;
         }
     }
 
@@ -419,7 +282,7 @@ public class MediaCodecVideoDecoder {
         try {
             return mediaCodec.dequeueInputBuffer(DEQUEUE_INPUT_TIMEOUT);
         } catch (IllegalStateException e) {
-            Log.e(TAG, "dequeueIntputBuffer failed", e);
+            Logging.e(TAG, "dequeueIntputBuffer failed", e);
             return -2;
         }
     }
@@ -433,7 +296,7 @@ public class MediaCodecVideoDecoder {
             mediaCodec.queueInputBuffer(inputBufferIndex, 0, size, timestampUs, 0);
             return true;
         } catch (IllegalStateException e) {
-            Log.e(TAG, "decode failed", e);
+            Logging.e(TAG, "decode failed", e);
             return false;
         }
     }
@@ -454,37 +317,35 @@ public class MediaCodecVideoDecoder {
         private final long presentationTimestampUs;
     }
 
-    // Dequeue and return an output buffer index, -1 if no output
-    // buffer available or -2 if error happened.
-    private DecoderOutputBufferInfo dequeueOutputBuffer(int dequeueTimeoutUs) {
+    // Dequeue and return a DecoderOutputBufferInfo, or null if no decoded buffer is ready.
+    // Throws IllegalStateException if call is made on the wrong thread, if color format changes to an
+    // unsupported format, or if |mediaCodec| is not in the Executing state. Throws CodecException
+    // upon codec error.
+    private DecoderOutputBufferInfo dequeueOutputBuffer(int dequeueTimeoutUs)
+            throws IllegalStateException, MediaCodec.CodecException {
         checkOnMediaCodecThread();
-        try {
-            MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
-            int result = mediaCodec.dequeueOutputBuffer(info, dequeueTimeoutUs);
-            while (result == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED ||
-                    result == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                if (result == MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED) {
+        // Drain the decoder until receiving a decoded buffer or hitting
+        // MediaCodec.INFO_TRY_AGAIN_LATER.
+        final MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
+        while (true) {
+            final int result = mediaCodec.dequeueOutputBuffer(info, dequeueTimeoutUs);
+            switch (result) {
+                case MediaCodec.INFO_TRY_AGAIN_LATER:
+                    return null;
+                case MediaCodec.INFO_OUTPUT_BUFFERS_CHANGED:
                     outputBuffers = mediaCodec.getOutputBuffers();
-                    Log.d(TAG, "Decoder output buffers changed: " + outputBuffers.length);
-                } else if (result == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                    Logging.d(TAG, "Decoder output buffers changed: " + outputBuffers.length);
+                    break;
+                case MediaCodec.INFO_OUTPUT_FORMAT_CHANGED:
                     MediaFormat format = mediaCodec.getOutputFormat();
-                    Log.d(TAG, "Decoder format changed: " + format.toString());
+                    Logging.d(TAG, "Decoder format changed: " + format.toString());
                     width = format.getInteger(MediaFormat.KEY_WIDTH);
                     height = format.getInteger(MediaFormat.KEY_HEIGHT);
                     if (!useSurface && format.containsKey(MediaFormat.KEY_COLOR_FORMAT)) {
                         colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
-                        Log.d(TAG, "Color: 0x" + Integer.toHexString(colorFormat));
-                        // Check if new color space is supported.
-                        boolean validColorFormat = false;
-                        for (int supportedColorFormat : supportedColorList) {
-                            if (colorFormat == supportedColorFormat) {
-                                validColorFormat = true;
-                                break;
-                            }
-                        }
-                        if (!validColorFormat) {
-                            Log.e(TAG, "Non supported color format");
-                            return new DecoderOutputBufferInfo(-1, 0, 0, -1);
+                        Logging.d(TAG, "Color: 0x" + Integer.toHexString(colorFormat));
+                        if (!supportedColorList.contains(colorFormat)) {
+                            throw new IllegalStateException("Non supported color format: " + colorFormat);
                         }
                     }
                     if (format.containsKey("stride")) {
@@ -493,37 +354,24 @@ public class MediaCodecVideoDecoder {
                     if (format.containsKey("slice-height")) {
                         sliceHeight = format.getInteger("slice-height");
                     }
-                    Log.d(TAG, "Frame stride and slice height: "
-                            + stride + " x " + sliceHeight);
+                    Logging.d(TAG, "Frame stride and slice height: " + stride + " x " + sliceHeight);
                     stride = Math.max(width, stride);
                     sliceHeight = Math.max(height, sliceHeight);
-                }
-                result = mediaCodec.dequeueOutputBuffer(info, dequeueTimeoutUs);
+                    break;
+                default:
+                    // Output buffer decoded.
+                    return new DecoderOutputBufferInfo(
+                            result, info.offset, info.size, info.presentationTimeUs);
             }
-            if (result >= 0) {
-                return new DecoderOutputBufferInfo(result, info.offset, info.size,
-                        info.presentationTimeUs);
-            }
-            return null;
-        } catch (IllegalStateException e) {
-            Log.e(TAG, "dequeueOutputBuffer failed", e);
-            return new DecoderOutputBufferInfo(-1, 0, 0, -1);
         }
     }
 
-    // Release a dequeued output buffer back to the codec for re-use.  Return
-    // false if the codec is no longer operable.
-    private boolean releaseOutputBuffer(int index, boolean render) {
+    // Release a dequeued output buffer back to the codec for re-use.
+    // Throws IllegalStateException if the call is made on the wrong thread or if |mediaCodec| is not
+    // in the Executing state. Throws MediaCodec.CodecException upon codec error.
+    private void releaseOutputBuffer(int index)
+            throws IllegalStateException, MediaCodec.CodecException {
         checkOnMediaCodecThread();
-        try {
-            if (!useSurface) {
-                render = false;
-            }
-            mediaCodec.releaseOutputBuffer(index, render);
-            return true;
-        } catch (IllegalStateException e) {
-            Log.e(TAG, "releaseOutputBuffer failed", e);
-            return false;
-        }
+        mediaCodec.releaseOutputBuffer(index, useSurface);
     }
 }

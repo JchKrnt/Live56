@@ -28,6 +28,7 @@
 
 package org.webrtc;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -84,6 +85,11 @@ public class PeerConnection {
          * Triggered when the IceConnectionState changes.
          */
         public void onIceConnectionChange(IceConnectionState newState);
+
+        /**
+         * Triggered when the ICE connection receiving status changes.
+         */
+        public void onIceConnectionReceivingChange(boolean receiving);
 
         /**
          * Triggered when the IceGatheringState changes.
@@ -179,6 +185,20 @@ public class PeerConnection {
     ;
 
     /**
+     * Java version of rtc::KeyType
+     */
+    public enum KeyType {
+        RSA, ECDSA
+    }
+
+    /**
+     * Java version of PeerConnectionInterface.ContinualGatheringPolicy
+     */
+    public enum ContinualGatheringPolicy {
+        GATHER_ONCE, GATHER_CONTINUALLY
+    }
+
+    /**
      * Java version of PeerConnectionInterface.RTCConfiguration
      */
     public static class RTCConfiguration {
@@ -188,6 +208,10 @@ public class PeerConnection {
         public RtcpMuxPolicy rtcpMuxPolicy;
         public TcpCandidatePolicy tcpCandidatePolicy;
         public int audioJitterBufferMaxPackets;
+        public boolean audioJitterBufferFastAccelerate;
+        public int iceConnectionReceivingTimeout;
+        public KeyType keyType;
+        public ContinualGatheringPolicy continualGatheringPolicy;
 
         public RTCConfiguration(List<IceServer> iceServers) {
             iceTransportsType = IceTransportsType.ALL;
@@ -196,6 +220,10 @@ public class PeerConnection {
             tcpCandidatePolicy = TcpCandidatePolicy.ENABLED;
             this.iceServers = iceServers;
             audioJitterBufferMaxPackets = 50;
+            audioJitterBufferFastAccelerate = false;
+            iceConnectionReceivingTimeout = -1;
+            keyType = KeyType.ECDSA;
+            continualGatheringPolicy = ContinualGatheringPolicy.GATHER_ONCE;
         }
     }
 
@@ -231,8 +259,7 @@ public class PeerConnection {
     public native void setRemoteDescription(
             SdpObserver observer, SessionDescription sdp);
 
-    public native boolean updateIce(
-            List<IceServer> iceServers, MediaConstraints constraints);
+    public native boolean setConfiguration(RTCConfiguration config);
 
     public boolean addIceCandidate(IceCandidate candidate) {
         return nativeAddIceCandidate(
