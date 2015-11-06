@@ -511,6 +511,11 @@ public class KWRtcSession implements KWSessionEvent {
         }
 
         @Override
+        public void onIceConnectionReceivingChange(boolean receiving) {
+
+        }
+
+        @Override
         public void onIceGatheringChange(PeerConnection.IceGatheringState newState) {
             LogCat.v(pcObserverLogMsg + "onIceGatheringChange IceGatheringState : " + newState.name());
 
