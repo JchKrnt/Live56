@@ -84,6 +84,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 
         initKWParamet();
 
+        initViewerRoom();
+
         webSocketClient = KWWebSocketClient.getInstance();
         webSocketClient.setEvent(this);
 
@@ -122,6 +124,27 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
 //        initAudioManager();
 
         return contentView;
+    }
+
+    /**
+     * init Room while current player is viewer.
+     */
+    private void initViewerRoom() {
+        if (this instanceof ObserverActivity) {
+            String roomName = getIntent().getStringExtra(SquareFrag.MASTER_KEY);
+            initRoom(roomName);
+        }
+    }
+
+    /**
+     * 初始化 global value RoomBean.
+     *
+     * @param roomName
+     */
+    private void initRoom(String roomName) {
+
+        room = new RoomBean();
+        room.setName(roomName);
     }
 
     private void initKWParamet() {
@@ -328,10 +351,8 @@ public abstract class PlayerActivity extends BaseActivity implements KWEvent {
      */
     private void sendSdp() {
         if (this instanceof ObserverActivity) {  //viewer.
-            String roomName = getIntent().getStringExtra(SquareFrag.MASTER_KEY);
-            room = new RoomBean();
-            room.setName(roomName);
-            webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, roomName);
+
+            webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, room.getName());
             LogCat.debug("send sdp on observer");
         } else {      //Live presenter.
             webSocketClient.sendSdp(settingsBean.getUserType(), localSdpStr, room.getName());

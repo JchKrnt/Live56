@@ -597,34 +597,26 @@ public class KWRtcSession implements KWSessionEvent {
 
     private List<PeerConnection.IceServer> getIces() {
         String[] stunAddresses = new String[]{
-                "stun.l.google.com:19302",
+//                "220.181.90.108:3478",
+//                "61.135.176.88:3478",
+//                "220.181.90.110:3478",
+//                "220.181.90.108:3479",
+//                "61.135.176.88:3479",
+//                "220.181.90.108:3478"
+
         };
 
-//        "stun1.l.google.com:19302",
-//                "stun2.l.google.com:19302",
-//                "stun3.l.google.com:19302",
-//                "stun4.l.google.com:19302",
-//                "stun.ekiga.net",
-//                "stun.ideasip.com",
-//                "stun.rixtelecom.se",
-//                "stun.schlund.de",
-//                "stun.stunprotocol.org:3478",
-//                "stun.voiparound.com",
-//                "stun.voipbuster.com",
-//                "stun.voipstunt.com",
-//                "stun.voxgratia.org",
-//                "stun.services.mozilla.com"
         List<PeerConnection.IceServer> iceServers = new ArrayList<PeerConnection.IceServer>();
 //        StringBuilder stunAddress = new StringBuilder();
 //        for (String address : stunAddresses) {
 //            stunAddress.append("stun:").append(address);
-//            PeerConnection.IceServer iceServer = new PeerConnection.IceServer(stunAddress.toString(), "", "");
+//            PeerConnection.IceServer iceServer = new PeerConnection.IceServer(stunAddress.toString());
 //            iceServers.add(iceServer);
 //            stunAddress.delete(0, stunAddress.length());
 //        }
 
-        iceServers.add(new PeerConnection.IceServer("stun:47.88.1.81"));
-        iceServers.add(new PeerConnection.IceServer("turn:47.88.1.81", "u1", "u1"));
+        iceServers.add(new PeerConnection.IceServer("stun:47.88.1.81:3478"));
+//        iceServers.add(new PeerConnection.IceServer("turn:47.88.1.81:3478", "u1", "u1"));
 
         return iceServers;
     }

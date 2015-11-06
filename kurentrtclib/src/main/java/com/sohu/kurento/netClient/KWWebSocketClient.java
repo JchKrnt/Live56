@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 /**
  * Created by jingbiaowang on 2015/7/22.
- * <p>
+ * <p/>
  * 网络访问。
  */
 public class KWWebSocketClient implements WebSocketChannel.WebSocketEvents, KWWebSocket {
