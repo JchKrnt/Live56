@@ -1,6 +1,6 @@
 /*
  * libjingle
- * Copyright 2013 Google Inc.
+ * Copyright 2015 Google Inc.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -27,12 +27,31 @@
 
 package org.webrtc;
 
-/**
- * Java wrapper for a C++ AudioSourceInterface.  Used as the source for one or
- * more {@code AudioTrack} objects.
- */
-public class AudioSource extends MediaSource {
-  public AudioSource(long nativeSource) {
-    super(nativeSource);
+public class CallSessionFileRotatingLogSink {
+  static {
+    System.loadLibrary("jingle_peerconnection_so");
   }
+
+  private long nativeSink;
+
+  public static byte[] getLogData(String dirPath) {
+    return nativeGetLogData(dirPath);
+  }
+
+  public CallSessionFileRotatingLogSink(
+      String dirPath, int maxFileSize, Logging.Severity severity) {
+    nativeSink = nativeAddSink(dirPath, maxFileSize, severity.ordinal());
+  }
+
+  public void dispose() {
+    if (nativeSink != 0) {
+      nativeDeleteSink(nativeSink);
+      nativeSink = 0;
+    }
+  }
+
+  private static native long nativeAddSink(
+      String dirPath, int maxFileSize, int severity);
+  private static native void nativeDeleteSink(long nativeSink);
+  private static native byte[] nativeGetLogData(String dirPath);
 }
