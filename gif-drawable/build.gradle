@@ -1,4 +1,5 @@
 import org.apache.tools.ant.taskdefs.condition.Os
+
 buildscript {
     repositories {
         mavenCentral()
@@ -80,6 +81,7 @@ afterEvaluate { project ->
         }
     }
 }
+
 def shouldApplyFlavors() {
     def flavors = ['armeabi', 'armeabi-v7a', 'x86', 'mips', 'arm64-v8a', 'mips64', 'x86_64']
     boolean applyFlavors = false
@@ -91,9 +93,11 @@ def shouldApplyFlavors() {
     }
     applyFlavors
 }
+
 def isDebugBuild() {
     !gradle.startParameter.taskNames.contains("uploadArchives") && VERSION_NAME.contains("SNAPSHOT")
 }
+
 def getNdkBuildCommand() {
     def ndkDir = android.ndkDirectory
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -105,4 +109,5 @@ def getNdkBuildCommand() {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:support-annotations:23.1.0'
 }
