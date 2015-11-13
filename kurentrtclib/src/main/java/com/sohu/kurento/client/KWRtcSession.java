@@ -63,10 +63,10 @@ public class KWRtcSession implements KWSessionEvent {
     private static final String MAX_VIDEO_FPS_CONSTRAINT = "maxFrameRate";
     private static final String MIN_VIDEO_FPS_CONSTRAINT = "minFrameRate";
     private static final String DTLS_SRTP_KEY_AGREEMENT_CONSTRAINT = "DtlsSrtpKeyAgreement";
-    private static final int HD_VIDEO_WIDTH = 240;
-    private static final int HD_VIDEO_HEIGHT = 400;
-    private static final int MAX_VIDEO_WIDTH = 240;
-    private static final int MAX_VIDEO_HEIGHT = 400;
+    private static final int HD_VIDEO_WIDTH = 480;
+    private static final int HD_VIDEO_HEIGHT = 640;
+    private static final int MAX_VIDEO_WIDTH = 480;
+    private static final int MAX_VIDEO_HEIGHT = 640;
     private static final int MAX_VIDEO_FPS = 15;
     //保持現成同步。
     private boolean isError;
@@ -623,8 +623,8 @@ public class KWRtcSession implements KWSessionEvent {
 //            stunAddress.delete(0, stunAddress.length());
 //        }
 
-        iceServers.add(new PeerConnection.IceServer("stun:47.88.1.81"));
-        iceServers.add(new PeerConnection.IceServer("turn:47.88.1.81", "u1", "u1"));
+        iceServers.add(new PeerConnection.IceServer("stun:23.21.150.121:3478"));
+//        iceServers.add(new PeerConnection.IceServer("turn:47.88.1.81", "u1", "u1"));
 
         return iceServers;
     }
